@@ -7,6 +7,14 @@ class Solution {
         int max = Math.max(sides[0], sides[1]);
         int min = Math.min(sides[0], sides[1]);
         
-        return (max + min -1) - (max - min + 1) + 1;
+        int maxPossibleSide = max + min -1;
+        int minPossibleSide = max - min + 1;
+    
+        
+        return countNumbersInRange(minPossibleSide, maxPossibleSide);
+    }
+    
+    private int countNumbersInRange(int min, int max) {
+        return max - min + 1;
     }
 }
