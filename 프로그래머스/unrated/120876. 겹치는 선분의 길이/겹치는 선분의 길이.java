@@ -1,22 +1,18 @@
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
     public int solution(int[][] lines) {
-        int answer = 0;
-        int[] range = new int[201];
+        Map<Integer, Integer> map = new HashMap<>();
         
-        for(int[] line : lines) {
-            for(int num = line[0]; num < line[1]; num++) {
-                range[num + 100] += 1; 
+        for (int[] line : lines) {
+            int from = line[0];
+            int to = line[1];
+            
+            for (int i = from; i < to; i++) {
+                map.merge(i, 1, Integer::sum);
             }
         }
-        
-        for(int num : range) {
-            if(num >= 2) {
-                answer += 1;
-            }
-        }
-        
-        return answer;
+
+        return (int) map.values().stream().filter(i -> i > 1).count();
     }
 }
