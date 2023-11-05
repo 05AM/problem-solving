@@ -10,10 +10,9 @@ class Solution {
                 if(db[i][1].equals(enterPw)) {
                     answer = "login";
                     continue;
-                } else {
-                    answer = "wrong pw";
-                    continue;
                 }
+                answer = "wrong pw";
+                continue;
             }
         }
         
