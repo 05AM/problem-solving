@@ -1,20 +1,12 @@
 class Solution {
     public int solution(int[] common) {
-        int answer = 0;
+        int diff1 = common[1] - common[0];
+        int diff2 = common[2] - common[1];
         
-        int first = common[0];
-        int second = common[1];
-        int third = common[2];
-        
-        int diff = second - first;
-        int ratio = first != 0 ? second / first : 1;
-        
-        if(first + diff == second && second + diff == third) {
-            answer = common[common.length - 1] + diff;
-        } else if(first * ratio == second && second * ratio == third) {
-            answer = common[common.length - 1] * ratio;
+        if(diff1 == diff2) {
+            return common[common.length - 1] + diff1;
+        } else {
+            return common[common.length - 1] * (common[1] / common[0]);
         }
-        
-        return answer;
     }
 }
