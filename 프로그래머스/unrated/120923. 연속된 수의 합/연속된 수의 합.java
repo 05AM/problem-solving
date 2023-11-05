@@ -2,23 +2,12 @@ class Solution {
     public int[] solution(int num, int total) {
         int[] answer = new int[num];
         
-        if(num % 2 == 0) {
-            int mid = num / 2 - 1;
-            int midValue = total / num;
-            int firstValue = midValue - (num / 2 - 1);
+        int check = num * (num + 1) / 2;
+        int start = 1 + (total - check) / num;
             
-            for(int i = 0; i < num; i++) {
-                answer[i] = firstValue++;
-            }  
-        } else {
-            int mid = num / 2;
-            int midValue = total / num;
-            int firstValue = midValue - num / 2;
-            
-            for(int i = 0; i < num; i++) {
-                answer[i] = firstValue++;
-            }  
-        }
+        for(int i = 0; i < num; i++) {
+            answer[i] = start++;
+        }  
         
         return answer;
     }
