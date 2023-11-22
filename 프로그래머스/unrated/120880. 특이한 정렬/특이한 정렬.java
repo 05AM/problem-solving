@@ -1,38 +1,21 @@
 import java.util.*;
-import java.util.stream.*;
-
 class Solution {
     public int[] solution(int[] numlist, int n) {
-        List<Integer> numbers = IntStream.of(numlist)
-            .mapToObj(i -> i - n)
-            .collect(Collectors.toList());
-
-        numbers.sort((a, b) -> Integer.compare(Math.abs(a), Math.abs(b)));
+        int size = numlist.length;
         
-        int[] answer = new int[numbers.size()];
-        
-        for(int i = 0; i <= numbers.size() - 1; i++) {
-            if(i < numbers.size() - 1) {
-                int now = numbers.get(i);
-                int next = numbers.get(i + 1);
-
-                if(Math.abs(now) == Math.abs(next)) {
-                    if(now < next) {
-                        answer[i + 1] = now + n;
-                        answer[i] = next + n;
-                    } else {
-                        answer[i] = now + n;
-                        answer[i + 1] = next + n;
-                    }
-                    i++;
-                } else {
-                    answer[i] = numbers.get(i) + n;
+        for(int i = 0; i < size-1; i++){
+            for(int k = i+1; k < size; k++){
+                int a = (numlist[i] - n) * (numlist[i] > n ? 1 : -1);
+                int b = (numlist[k] - n) * (numlist[k] > n ? 1 : -1);
+                
+                if(a > b || (a == b && numlist[i] < numlist[k])){
+                    int temp = numlist[i];
+                    numlist[i] = numlist[k];
+                    numlist[k] = temp;
                 }
-            } else {
-                answer[i] = numbers.get(i) + n;   
             }
         }
         
-        return answer;
+        return numlist;
     }
 }
