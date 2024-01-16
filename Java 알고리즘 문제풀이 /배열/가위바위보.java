@@ -10,10 +10,13 @@ public class Main {
             int b = optionsB[i];
 
             if (a == b) {
+                // 비긴 경우
                 answer[i] = "D";
             } else if ((a == 1 && b == 3) || (a == 2 && b == 1) || (a == 3 && b == 2)) {
+                // 이긴 경우
                 answer[i] = "A";
             } else {
+                // 진 경우
                 answer[i] = "B";
             }
         }
