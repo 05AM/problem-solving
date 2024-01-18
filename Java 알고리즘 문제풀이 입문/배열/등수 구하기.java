@@ -1,27 +1,21 @@
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Scanner;
 
 public class Main {
     public int[] solution(int n, Integer[] scores) {
         int[] answer = new int[n];
-        Integer[] scoresOrdered = Arrays.copyOf(scores, n);
-        Arrays.sort(scoresOrdered, Comparator.reverseOrder());
 
-        for (int i = 0, rank = 1; i < n; i++) {
-            int score = scoresOrdered[i];
-            int nextRank = rank;
+        for (int i = 0, rank = 1; i < n; i++, rank = 1) {
+            int score = scores[i];
 
+            // 나의 등수는 나보다 큰 원소가 몇 개 존재하는가에 달려있다.
             for (int j = 0; j < n; j++) {
-                if (answer[j] == 0) {
-                    if (scores[j] == score) {
-                        answer[j] = rank;
-                        nextRank++;
-                    }
+                if (score < scores[j]) {
+                    rank++;
                 }
             }
-            rank = nextRank;
+            answer[i] = rank;
         }
+
         return answer;
     }
 
