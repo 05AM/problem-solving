@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Main {
-    public int[] solution(int n, Integer[] scores) {
+    public int[] solution(int n, int[] scores) {
         int[] answer = new int[n];
 
         for (int i = 0, rank = 1; i < n; i++, rank = 1) {
@@ -24,7 +24,7 @@ public class Main {
         Scanner in = new Scanner(System.in);
 
         int n = in.nextInt();
-        Integer[] scores = new Integer[n];
+        int[] scores = new int[n];
 
         for (int i = 0; i < n; i++) {
             scores[i] = in.nextInt();
