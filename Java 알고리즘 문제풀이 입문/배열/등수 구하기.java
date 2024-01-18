@@ -4,8 +4,9 @@ public class Main {
     public int[] solution(int n, int[] scores) {
         int[] answer = new int[n];
 
-        for (int i = 0, rank = 1; i < n; i++, rank = 1) {
+        for (int i = 0; i < n; i++) {
             int score = scores[i];
+            int rank = 1;
 
             // 나의 등수는 나보다 큰 원소가 몇 개 존재하는가에 달려있다.
             for (int j = 0; j < n; j++) {
