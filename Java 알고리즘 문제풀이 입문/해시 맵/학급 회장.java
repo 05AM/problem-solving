@@ -1,28 +1,26 @@
-import java.util.*;
-class Main {	
-	public char solution(int n, String s){
-		char answer=' ';
-		HashMap<Character, Integer> map=new HashMap<>();
-		for(char x : s.toCharArray()){
-			map.put(x, map.getOrDefault(x, 0)+1); 
-		}
-		
-		int max=Integer.MIN_VALUE;
-		for(char key : map.keySet()){
-			//System.out.println(key+" "+map.get(key));
-			if(map.get(key)>max){
-				max=map.get(key);
-				answer=key;
-			}
-		}
-		return answer;
-	}
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
-	public static void main(String[] args){
-		Main T = new Main();
-		Scanner kb = new Scanner(System.in);
-		int n=kb.nextInt();
-		String str=kb.next();
-		System.out.println(T.solution(n, str));
-	}
+public class Main {
+    private String solution(int n, String[] votes) {
+        HashMap<String, Integer> result = new HashMap<>();
+
+        for (String vote : votes) {
+            result.merge(vote, 1, Integer::sum);
+        }
+
+        return Collections.max(result.entrySet(), Map.Entry.comparingByValue()).getKey();
+    }
+
+    public static void main(String[] args) {
+        Main T = new Main();
+        Scanner in = new Scanner(System.in);
+
+        int n = in.nextInt();
+        String[] votes = in.next().split("");
+
+        System.out.println(T.solution(n, votes));
+    }
 }
