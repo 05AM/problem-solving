@@ -1,4 +1,4 @@
-### 💪🏻 스스로 풀기
+### ✍🏻 스스로 풀기
 #### 💡 LinkedList 사용
 ``` java
 private int[] solution(int size, int n, int[] tasks) {
@@ -64,7 +64,7 @@ private int[] solution(int size, int n, int[] tasks) {
 
 <br>
 
-### 💡 강의자료 코드
+### ✔️ 강의자료 코드
 ``` java
 import java.util.*;
 class Main {	
