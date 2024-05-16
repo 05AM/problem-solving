@@ -6,7 +6,6 @@ public class Main {
 	private final static int NUM_TRIANGLE_SIDE = 3;
 
 	public static void main(String[] args) {
-		Main main = new Main();
 		Scanner in = new Scanner(System.in);
 
 		int[] arr = new int[NUM_TRIANGLE_SIDE];
@@ -20,7 +19,7 @@ public class Main {
 				break;
 			}
 
-			if (main.isRightTriangle(arr)) {
+			if (isRightTriangle(arr)) {
 				System.out.println("right");
 			} else {
 				System.out.println("wrong");
@@ -28,7 +27,7 @@ public class Main {
 		}
 	}
 
-	private boolean isRightTriangle(int[] nums) {
+	private static boolean isRightTriangle(int[] nums) {
 		Arrays.sort(nums);
 
 		return Math.pow(nums[2], 2) == (Math.pow(nums[0], 2) + Math.pow(nums[1], 2));
