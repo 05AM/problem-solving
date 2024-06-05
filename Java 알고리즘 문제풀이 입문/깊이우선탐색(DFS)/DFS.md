@@ -8,10 +8,13 @@
 - 깊이 우선 탐색(DFS)이 너비 우선 탐색(BFS)보다 좀 더 간단하다.
 - 단순 검색 속도 자체는 너비 우선 탐색(BFS)에 비해서 느리다.
 
+<br>
+
 ## 🔷 깊이 우선 탐색의 특징
 
 - 자기 자신을 호출하는 순환 알고리즘의 형태 를 가지고 있다.
 - 전위 순회(Pre-Order Traversals)를 포함한 다른 형태의 트리 순회는 모두 DFS의 한 종류이다.
+
 ![image](https://github.com/05AM/problem-solving/assets/83827023/4e62b94a-5e9c-4e4f-b77b-6375d4fe6a65)
 
 ## 🔷 구현
@@ -53,6 +56,8 @@ class Tree {
 	}
 }
 ```
+
+<br>
 
 ## 🔷 참고 자료
 https://gmlwjd9405.github.io/2018/08/14/algorithm-dfs.html
