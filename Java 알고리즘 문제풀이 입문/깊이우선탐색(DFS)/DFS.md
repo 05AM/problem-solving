@@ -1,0 +1,58 @@
+## 🔷 깊이 우선 탐색 (DFS, Depth-First Search)
+
+그래프 탐색 방법 중 하나로, 루트 노드(혹은 다른 임의의 노드)에서 시작해서 **다음 분기(branch)로 넘어가기 전에 해당 분기를 완벽하게 탐색**하는 방법이다.
+
+- 미로를 탐색할 때 한 방향으로 갈 수 있을 때까지 계속 가다가 더 이상 갈 수 없게 되면 다시 가장 가까운 갈림길로 돌아와서 이곳으로부터 다른 방향으로 다시 탐색을 진행하는 방법과 유사하다.
+- 즉, 넓게(wide) 탐색하기 전에 깊게(deep) 탐색하는 것이다.
+- 사용하는 경우: 모든 노드를 방문 하고자 하는 경우에 이 방법을 선택한다.
+- 깊이 우선 탐색(DFS)이 너비 우선 탐색(BFS)보다 좀 더 간단하다.
+- 단순 검색 속도 자체는 너비 우선 탐색(BFS)에 비해서 느리다.
+
+## 🔷 깊이 우선 탐색의 특징
+
+- 자기 자신을 호출하는 순환 알고리즘의 형태 를 가지고 있다.
+- 전위 순회(Pre-Order Traversals)를 포함한 다른 형태의 트리 순회는 모두 DFS의 한 종류이다.
+![image](https://github.com/05AM/problem-solving/assets/83827023/4e62b94a-5e9c-4e4f-b77b-6375d4fe6a65)
+
+## 🔷 구현
+``` java
+class Node {
+	int data;
+	Node lt;
+	Node rt;
+
+	public Node(int data) {
+		this.data = data;
+		this.lt = this.rt = null;
+	}
+}
+
+class Tree {
+
+	Node root;
+
+	// 트리 구조 예시
+	public Tree() {
+		this.root = new Node(1);
+		this.root.lt = new Node(2);
+		this.root.rt = new Node(3);
+		this.root.lt.lt = new Node(4);
+		this.root.lt.rt = new Node(5);
+		this.root.rt.lt = new Node(6);
+		this.root.rt.rt = new Node(7);
+	}
+
+	public void dfs(Node root) {
+		if (root == null) {
+			return;
+		} else {
+			System.out.print(root.data + " ");
+			dfs(root.lt);
+			dfs(root.rt);
+		}
+	}
+}
+```
+
+## 🔷 참고 자료
+https://gmlwjd9405.github.io/2018/08/14/algorithm-dfs.html
