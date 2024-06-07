@@ -17,46 +17,6 @@
 
 ![image](https://github.com/05AM/problem-solving/assets/83827023/4e62b94a-5e9c-4e4f-b77b-6375d4fe6a65)
 
-## 🔷 구현
-``` java
-class Node {
-	int data;
-	Node lt;
-	Node rt;
-
-	public Node(int data) {
-		this.data = data;
-		this.lt = this.rt = null;
-	}
-}
-
-class Tree {
-
-	Node root;
-
-	// 트리 구조 예시
-	public Tree() {
-		this.root = new Node(1);
-		this.root.lt = new Node(2);
-		this.root.rt = new Node(3);
-		this.root.lt.lt = new Node(4);
-		this.root.lt.rt = new Node(5);
-		this.root.rt.lt = new Node(6);
-		this.root.rt.rt = new Node(7);
-	}
-
-	public void dfs(Node root) {
-		if (root == null) {
-			return;
-		} else {
-			System.out.print(root.data + " ");
-			dfs(root.lt);
-			dfs(root.rt);
-		}
-	}
-}
-```
-
 <br>
 
 ## 🔷 참고 자료
