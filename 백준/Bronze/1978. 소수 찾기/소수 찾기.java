@@ -1,44 +1,47 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
-public class Main {
+class Main {
 
-	private int solution(int[] nums) {
-		int cnt = 0;
+    static boolean[] primeNumbers;
 
-		for (int n : nums) {
-			if (isPrimeNumber(n)) {
-				cnt++;
-			}
-		}
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
 
-		return cnt;
-	}
+        int n = in.nextInt();
+        int[] nums = new int[n];
 
-	private boolean isPrimeNumber(int num) {
-		if (num == 1) {
-			return false;
-		}
+        for (int i = 0; i < n; i++) {
+            nums[i] = in.nextInt();
+        }
 
-		for (int i = 2; i < num; i++) {
-			if (num % i == 0) {
-				return false;
-			}
-		}
+        System.out.println(solution(nums));
+    }
 
-		return true;
-	}
+    private static int solution(int[] nums) {
+        int max = Arrays.stream(nums)
+                .max()
+                .orElse(-1);
 
-	public static void main(String[] args) {
-		Main main = new Main();
-		Scanner in = new Scanner(System.in);
+        primeNumbers = new boolean[max + 1];
+        Arrays.fill(primeNumbers, true);
+        primeNumbers[1] = false;
 
-		int size = in.nextInt();
-		int[] arr = new int[size];
+        for (int i = 2; i * i <= max; i++) {
+            if (primeNumbers[i]) {
+                for (int j = i * i; j <= max; j += i) {
+                    primeNumbers[j] = false;
+                }
+            }
+        }
 
-		for (int i = 0; i < size; i++) {
-			arr[i] = in.nextInt();
-		}
+        int answer = 0;
+        for (int num : nums) {
+            if (primeNumbers[num]) {
+                answer++;
+            }
+        }
 
-		System.out.println(main.solution(arr));
-	}
+        return answer;
+    }
 }
