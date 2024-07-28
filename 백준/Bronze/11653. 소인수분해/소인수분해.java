@@ -19,22 +19,18 @@ class Main {
         Arrays.fill(primeNumbers, true);
         primeNumbers[1] = false;
 
-        for (int i = 2; i * i <= n; i++) {
+        List<Integer> factors = new ArrayList<>();
+
+        for (int i = 2; i <= n; i++) {
             if (primeNumbers[i]) {
-                for (int j = i * i; j <= n; j += i) {
+                while ((n != 1) && (n % i == 0)) {
+                    n /= i;
+                    factors.add(i);
+                }
+
+                for (int j = i; j <= n; j += i) {
                     primeNumbers[j] = false;
                 }
-            }
-        }
-
-        List<Integer> factors = new ArrayList<>();
-        int i = 2;
-        while (n != 1) {
-            if (primeNumbers[i] && (n % i == 0)) {
-                n /= i;
-                factors.add(i);
-            } else {
-                i++;
             }
         }
 
