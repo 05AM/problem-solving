@@ -12,8 +12,9 @@ class Main {
 
     private static int solution(int n) {
         int size = 9 * String.valueOf(n).length();
+        int start = Math.max((n - size), 0);
 
-        for (int i = n - size; i < n; i++) {
+        for (int i = start; i < n; i++) {
             if (getDecompositionSum(i) == n) {
                 return i;
             }
