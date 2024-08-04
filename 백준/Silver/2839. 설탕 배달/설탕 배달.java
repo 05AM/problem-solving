@@ -29,10 +29,6 @@ class Main {
             }
         }
 
-        if (cnt_5 >= 0) {
-            return cnt_3 + cnt_5;
-        } else {
-            return -1;
-        }
+        return cnt_5 >= 0 ? cnt_3 + cnt_5 : -1;
     }
 }
