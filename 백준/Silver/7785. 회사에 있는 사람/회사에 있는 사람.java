@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -11,7 +12,7 @@ class Main {
 
         int n = in.nextInt();
 
-        TreeMap<String, String> log = new TreeMap<>();
+        TreeMap<String, String> log = new TreeMap<>(Comparator.reverseOrder());
 
         for (int i = 0; i < n; i++) {
             String name = in.next();
@@ -20,7 +21,7 @@ class Main {
             log.put(name, status);
         }
 
-        for (Map.Entry<String, String> entry : log.descendingMap().entrySet()) {
+        for (Map.Entry<String, String> entry : log.entrySet()) {
             if (ENTER.equals(entry.getValue())) {
                 System.out.println(entry.getKey());
             }
