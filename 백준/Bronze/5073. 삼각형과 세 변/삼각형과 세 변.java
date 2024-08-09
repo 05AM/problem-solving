@@ -6,17 +6,17 @@ class Main {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
 
-        int a = in.nextInt();
-        int b = in.nextInt();
-        int c = in.nextInt();
+        while (true) {
+            int a = in.nextInt();
+            int b = in.nextInt();
+            int c = in.nextInt();
 
-        while (a != 0 && b != 0 && c != 0) {
+            if (a == 0 && b == 0 && c == 0) {
+                break;
+            }
+            
             int[] triangle = new int[] {a, b, c};
             System.out.println(decideKindOfTriangle(triangle));
-
-            a = in.nextInt();
-            b = in.nextInt();
-            c = in.nextInt();
         }
     }
 
