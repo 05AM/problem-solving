@@ -1,5 +1,3 @@
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 class Main {
@@ -10,24 +8,23 @@ class Main {
     }
 
     public static Character solution(String input) {
-        Map<Character, Integer> count = new HashMap<>();
+        int[] cnt = new int[26];
+        int max = Integer.MIN_VALUE;
+        char key = '?';
 
         for (char ch : input.toCharArray()) {
-            count.merge(Character.toLowerCase(ch), 1, Integer::sum);
-        }
+            ch = Character.toUpperCase(ch);
+            int index = ch - 65;
+            cnt[index]++;
 
-        Character answer = '?';
-        int max = Integer.MIN_VALUE;
-
-        for (Map.Entry<Character, Integer> entry : count.entrySet()) {
-            if (entry.getValue() == max) {
-                answer = '?';
-            } else if (entry.getValue() > max) {
-                answer = entry.getKey();
-                max = entry.getValue();
+            if (max == cnt[index]) {
+                key = '?';
+            } else if (max < cnt[index]) {
+                key = ch;
+                max = cnt[index];
             }
         }
 
-        return Character.toUpperCase(answer);
+        return key;
     }
 }
