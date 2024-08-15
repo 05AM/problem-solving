@@ -1,22 +1,14 @@
 import java.util.Scanner;
 
 public class Main {
-    private static int cnt = 0;
-
-    public static int recursion(String s, int l, int r) {
-        cnt++;
-
+    public static void recursion(String s, int l, int r) {
         if (l >= r)
-            return 1;
+            System.out.println(1 + " " + (l + 1));
         else if (s.charAt(l) != s.charAt(r))
-            return 0;
+            System.out.println(0 + " " + (l + 1));
         else {
-            return recursion(s, l + 1, r - 1);
+            recursion(s, l + 1, r - 1);
         }
-    }
-
-    public static int isPalindrome(String s) {
-        return recursion(s, 0, s.length() - 1);
     }
 
     public static void main(String[] args) {
@@ -26,9 +18,7 @@ public class Main {
 
         for (int i = 0; i < n; i++) {
             String input = in.next();
-            cnt = 0;
-            
-            System.out.println(isPalindrome(input) + " " + cnt);
+            recursion(input, 0, input.length() - 1);
         }
     }
 }
