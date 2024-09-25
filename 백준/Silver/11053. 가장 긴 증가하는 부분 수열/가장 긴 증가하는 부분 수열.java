@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -21,19 +22,14 @@ public class Main {
         }
 
         int[] dp = new int[n + 1];
-        dp[1] = 1;
-        dp[2] = nums[1] < nums[2] ? 2 : 1;
+        Arrays.fill(dp, 1);
 
         int answer = Integer.MIN_VALUE;
 
-        for (int i = 3; i <= n; i++) {
-            for (int j = i - 1; j >= 0; j--) {
+        for (int i = 2; i <= n; i++) {
+            for (int j = i - 1; j >= 1; j--) {
                 if (nums[i] > nums[j]) {
                     dp[i] = Math.max(dp[i], dp[j] + 1);
-                }
-
-                if (dp[i] == 0) {
-                    dp[i] = 1;
                 }
 
                 answer = Math.max(answer, dp[i]);
