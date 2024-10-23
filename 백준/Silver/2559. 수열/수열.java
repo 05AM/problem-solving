@@ -1,7 +1,6 @@
 import java.util.Scanner;
 
 public class Main {
-    static int[] prefixSum;
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -9,10 +8,9 @@ public class Main {
         int n = in.nextInt();
         int k = in.nextInt();
 
-        prefixSum = new int[n + 1];
-        int[] temperatures = new int[n + 1];
+        int[] temperatures = new int[n];
 
-        for (int i = 1; i <= n; i++) {
+        for (int i = 0; i < n; i++) {
             temperatures[i] = in.nextInt();
         }
 
@@ -20,14 +18,15 @@ public class Main {
     }
 
     private static int solution(int n, int k, int[] temperatures) {
-        int max = Integer.MIN_VALUE;
+        int currentSum = 0;
+        for (int i = 0; i < k; i++) {
+            currentSum += temperatures[i];
+        }
 
-        for (int i = 1; i <= n; i++) {
-            prefixSum[i] = prefixSum[i - 1] + temperatures[i];
-
-            if (i >= k) {
-                max = Math.max(max, prefixSum[i] - prefixSum[i - k]);
-            }
+        int max = currentSum;
+        for (int i = k; i < n; i++) {
+            currentSum = currentSum - temperatures[i - k] + temperatures[i];
+            max = Math.max(max, currentSum);
         }
 
         return max;
