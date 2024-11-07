@@ -18,24 +18,15 @@ public class Main {
     }
 
     private static int solution(int n, int[] distances, int[] costs) {
-        costs[n - 1] = Integer.MAX_VALUE;
-        int minCost = Arrays.stream(costs).min()
-            .orElseThrow(() -> new RuntimeException("비용 배열이 비어있습니다."));
-
         int sum = 0;
+        int currentMinCost = Integer.MAX_VALUE;
+
         for (int i = 0; i < n - 1; i++) {
-            if (costs[i] != minCost) {
-                sum += costs[i] * distances[i];
+            if (costs[i] >= currentMinCost) {
+                sum += currentMinCost * distances[i];
             } else {
-                int remainedDistance = 0;
-                for (int j = i; j < n - 1; j++) {
-                    remainedDistance += distances[j];
-                }
-
-                int rest = remainedDistance * minCost;
-                sum += rest;
-
-                break;
+                currentMinCost = costs[i];
+                sum += currentMinCost * distances[i];
             }
         }
 
