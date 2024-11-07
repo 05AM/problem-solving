@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -7,19 +6,22 @@ public class Main {
 
         int n = in.nextInt();
         in.nextLine();
-        int[] distances = Arrays.stream(in.nextLine().split(" "))
-            .mapToInt(Integer::parseInt)
-            .toArray();
-        int[] costs = Arrays.stream(in.nextLine().split(" "))
-            .mapToInt(Integer::parseInt)
-            .toArray();
+        long[] distances = new long[n - 1];
+        long[] costs = new long[n];
+
+        for (int i = 0; i < n - 1; i++) {
+            distances[i] = in.nextInt();
+        }
+        for (int i = 0; i < n; i++) {
+            costs[i] = in.nextInt();
+        }
 
         System.out.println(solution(n, distances, costs));
     }
 
-    private static int solution(int n, int[] distances, int[] costs) {
-        int sum = 0;
-        int currentMinCost = Integer.MAX_VALUE;
+    private static long solution(int n, long[] distances, long[] costs) {
+        long sum = 0;
+        long currentMinCost = Integer.MAX_VALUE;
 
         for (int i = 0; i < n - 1; i++) {
             if (costs[i] >= currentMinCost) {
