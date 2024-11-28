@@ -40,7 +40,7 @@ public class Main {
             }
         }
 
-        int result = 0;
+        int result = 1;
         while (!queue.isEmpty()) {
             int[] now = queue.poll();
             int x = now[0];
@@ -74,6 +74,6 @@ public class Main {
             }
         }
 
-        return result == 0 ? result : result - 1;
+        return result - 1;
     }
 }
