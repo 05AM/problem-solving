@@ -40,7 +40,6 @@ public class Main {
             }
         }
 
-        int result = 1;
         while (!queue.isEmpty()) {
             int[] now = queue.poll();
             int x = now[0];
@@ -58,22 +57,23 @@ public class Main {
 
                 if (box[ny][nx][nz] == 0) {
                     box[ny][nx][nz] = box[y][x][z] + 1;
-                    result = Math.max(result, box[ny][nx][nz]);
                     queue.add(new int[] {nx, ny, nz});
                 }
             }
         }
-
+        
+        int maxDays = 0;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 for (int k = 0; k < h; k++) {
                     if (box[i][j][k] == 0) {
                         return -1;
                     }
+                    maxDays = Math.max(maxDays, box[i][j][k] - 1);
                 }
             }
         }
 
-        return result - 1;
+        return maxDays;
     }
 }
