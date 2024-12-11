@@ -9,16 +9,11 @@ public class Main {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         String word = in.next();
-        int result = 0;
 
         for (String alphabet : alphabets) {
-            while (word.contains(alphabet)) {
-                word = word.replaceFirst(alphabet, " ");
-                result++;
-            }
+            word = word.replace(alphabet, "*");
         }
 
-        result += word.replace(" ", "").length();
-        System.out.println(result);
+        System.out.println(word.length());
     }
 }
