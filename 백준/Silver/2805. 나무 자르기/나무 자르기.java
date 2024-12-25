@@ -38,7 +38,7 @@ public class Main {
             }
 
             if (result >= m) {
-                max = Math.max(max, mid);
+                max = mid;
                 left = mid + 1;
             } else {
                 right = mid - 1;
