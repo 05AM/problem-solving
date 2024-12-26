@@ -25,17 +25,14 @@ public class Main {
     private static int solution(int n, int c, int[] houses) {
         Arrays.sort(houses);
 
-        int minX = houses[0];
-        int maxX = houses[n - 1];
-
         int left = 1;
-        int right = maxX - minX;
-
+        int right = houses[n - 1] - houses[0];
         int maxLength = 1;
+
         while (left <= right) {
             int mid = left + (right - left) / 2;
 
-            if (isPossible(mid, c, houses)) {
+            if (canInstallAll(mid, c, houses)) {
                 maxLength = mid;
                 left = mid + 1;
             } else {
@@ -46,17 +43,17 @@ public class Main {
         return maxLength;
     }
 
-    private static boolean isPossible(int value, int count, int[] houses) {
-        int currentInstalledX = houses[0];
+    private static boolean canInstallAll(int distance, int targetCount, int[] houses) {
+        int installedCount = 1;
+        int lastInstalled = houses[0];
 
-        int installedCnt = 1;
         for (int i = 1; i < houses.length; i++) {
-            if (houses[i] - currentInstalledX >= value) {
-                installedCnt++;
-                currentInstalledX = houses[i];
+            if (houses[i] - lastInstalled >= distance) {
+                installedCount++;
+                lastInstalled = houses[i];
             }
         }
 
-        return installedCnt >= count;
+        return installedCount >= targetCount;
     }
 }
