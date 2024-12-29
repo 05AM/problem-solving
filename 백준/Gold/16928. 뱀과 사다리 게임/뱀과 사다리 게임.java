@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -12,26 +11,31 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
+        int size = N * N + 1;
+        int[] board = new int[size];
+        for (int i = 1; i <= N * N; i++) {
+            board[i] = i;
+        }
+
         int[] input = Arrays.stream(in.readLine().split(" "))
             .mapToInt(Integer::parseInt)
             .toArray();
         int n = input[0];
         int m = input[1];
 
-        HashMap<Integer, Integer> paths = new HashMap<>();
         for (int i = 0; i < n + m; i++) {
             input = Arrays.stream(in.readLine().split(" "))
                 .mapToInt(Integer::parseInt)
                 .toArray();
 
-            paths.put(input[0], input[1]);
+            board[input[0]] = input[1];
         }
 
-        System.out.println(solution(paths));
+        System.out.println(solution(board));
     }
 
-    private static int solution(HashMap<Integer, Integer> paths) {
-        int size = (N + 1) * (N + 1);
+    private static int solution(int[] board) {
+        int size = N * N + 1;
         boolean[] isVisited = new boolean[size];
 
         Queue<int[]> queue = new LinkedList<>();
@@ -55,15 +59,11 @@ public class Main {
             for (int i = 1; i <= 6; i++) {
                 int next = location + i;
 
-                if (isVisited[next]) {
+                if (next > goal || isVisited[next]) {
                     continue;
                 }
 
-                if (paths.containsKey(next)) {
-                    queue.offer(new int[] {paths.get(next), trial + 1});
-                } else {
-                    queue.offer(new int[] {next, trial + 1});
-                }
+                queue.offer(new int[] {board[next], trial + 1});
             }
         }
 
