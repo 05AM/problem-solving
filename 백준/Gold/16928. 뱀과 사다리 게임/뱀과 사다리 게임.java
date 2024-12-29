@@ -7,6 +7,8 @@ import java.util.Queue;
 
 public class Main {
     private static final int N = 10;
+    private static final int START = 1;
+    private static final int GOAL = N * N;
 
     public static void main(String[] args) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -35,34 +37,31 @@ public class Main {
     }
 
     private static int solution(int[] board) {
-        int size = N * N + 1;
-        boolean[] isVisited = new boolean[size];
+        boolean[] isVisited = new boolean[GOAL + 1];
 
         Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[] {1, 0});
+        queue.offer(new int[] {START, 0});
+        isVisited[START] = true;
 
-        int goal = N * N;
         int answer = -1;
-
         while (!queue.isEmpty()) {
-            int[] now = queue.poll();
-            int location = now[0];
-            int trial = now[1];
+            int[] current = queue.poll();
+            int position = current[0];
+            int trial = current[1];
 
-            isVisited[location] = true;
-
-            if (location == goal) {
+            if (position == GOAL) {
                 answer = trial;
                 break;
             }
 
             for (int i = 1; i <= 6; i++) {
-                int next = location + i;
+                int next = position + i;
 
-                if (next > goal || isVisited[next]) {
+                if (next > GOAL || isVisited[next]) {
                     continue;
                 }
 
+                isVisited[position] = true;
                 queue.offer(new int[] {board[next], trial + 1});
             }
         }
