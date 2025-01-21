@@ -41,44 +41,42 @@ public class Main {
             int h = in.nextInt();           // 지나간 간선의 구성 정점 2
 
             // 그래프 초기화
-            List<List<Edge>> graph = new ArrayList<>();
-            for (int i = 0; i <= n; i++) {
-                graph.add(new ArrayList<>());
-            }
+            List<List<Edge>> graph = initGraph(n, m, in);
 
-            for (int i = 0; i < m; i++) {
-                int a = in.nextInt();       // 정점 1
-                int b = in.nextInt();       // 정점 2
-                int d = in.nextInt();       // 비용
-
-                graph.get(a).add(new Edge(b, d));
-                graph.get(b).add(new Edge(a, d));
-            }
-
-            List<Integer> availableTargets = new ArrayList<>();
+            // 목적지 후보 입력
+            List<Integer> targets = new ArrayList<>();
             for (int i = 0; i < t; i++) {
-                int target = in.nextInt();
-
-                int[] distanceStart = dijkstra(start, graph);
-                int[] distanceG = dijkstra(g, graph);
-                int[] distanceH = dijkstra(h, graph);
-
-                int shortest = distanceStart[target];
-                int viaGToH = distanceStart[g] + distanceG[h] + distanceH[target];
-                int viaHToG = distanceStart[h] + distanceH[g] + distanceG[target];
-
-                if (viaGToH == shortest || viaHToG == shortest) {
-                    availableTargets.add(target);
-                }
+                targets.add(in.nextInt());
             }
 
-            availableTargets.sort(Comparator.naturalOrder());
+            // 다익스트라 알고리즘으로 start, g, h에서의 최단거리 구하기
+            int[] distanceStart = dijkstra(start, graph);
+            int[] distanceG = dijkstra(g, graph);
+            int[] distanceH = dijkstra(h, graph);
 
-            for (Integer target : availableTargets) {
-                System.out.print(target + " ");
-            }
-            System.out.println();
+            // 유효한 목적지 찾기
+            List<Integer> validTargets = findValidTargets(distanceStart, distanceG, distanceH, targets, g, h);
+
+            // 결과 출력
+            printValidTargets(validTargets);
         }
+    }
+
+    private static List<List<Edge>> initGraph(int n, int m, Scanner in) {
+        List<List<Edge>> graph = new ArrayList<>();
+        for (int i = 0; i <= n; i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < m; i++) {
+            int a = in.nextInt();       // 정점 1
+            int b = in.nextInt();       // 정점 2
+            int d = in.nextInt();       // 비용
+
+            graph.get(a).add(new Edge(b, d));
+            graph.get(b).add(new Edge(a, d));
+        }
+        return graph;
     }
 
     private static int[] dijkstra(int start, List<List<Edge>> graph) {
@@ -108,5 +106,29 @@ public class Main {
         }
 
         return distances;
+    }
+
+    private static List<Integer> findValidTargets(int[] distanceStart, int[] distanceG, int[] distanceH, List<Integer> targets, int g, int h) {
+        List<Integer> validTargets = new ArrayList<>();
+
+        for (int target : targets) {
+            int shortest = distanceStart[target];
+            int viaGToH = distanceStart[g] + distanceG[h] + distanceH[target];
+            int viaHToG = distanceStart[h] + distanceH[g] + distanceG[target];
+
+            if (viaGToH == shortest || viaHToG == shortest) {
+                validTargets.add(target);
+            }
+        }
+
+        validTargets.sort(Comparator.naturalOrder());
+        return validTargets;
+    }
+
+    private static void printValidTargets(List<Integer> validTargets) {
+        for (Integer target : validTargets) {
+            System.out.print(target + " ");
+        }
+        System.out.println();
     }
 }
