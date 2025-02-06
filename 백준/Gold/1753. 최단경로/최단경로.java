@@ -1,9 +1,13 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Scanner;
 
 class Edge {
     int to;
@@ -16,82 +20,71 @@ class Edge {
 }
 
 class Path {
-    int idx;
-    int dist;
+    int id;
+    int distance;
 
-    public Path(int idx, int dist) {
-        this.idx = idx;
-        this.dist = dist;
+    public Path(int id, int distance) {
+        this.id = id;
+        this.distance = distance;
     }
 }
 
-class Main {
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
 
-    static final String INFINITE = "INF";
-    static List<Edge>[] graph;
-    static int[] dist;
-    static int start;
+        String[] input = in.readLine().split(" ");
+        int v = Integer.parseInt(input[0]);
+        int e = Integer.parseInt(input[1]);
 
-    public static void main(String[] args) {
-        input();
-        dijkstra(start);
-        printShortestDistance();
+        int start = Integer.parseInt(in.readLine());
+
+        List<List<Edge>> graph = new ArrayList<>();
+        for (int i = 0; i <= v; i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < e; i++) {
+            input = in.readLine().split(" ");
+
+            int from = Integer.parseInt(input[0]);
+            int to = Integer.parseInt(input[1]);
+            int w = Integer.parseInt(input[2]);
+
+            graph.get(from).add(new Edge(to, w));
+        }
+
+        solution(start, graph);
     }
 
-    private static void input() {
-        Scanner in = new Scanner(System.in);
+    private static void solution(int start, List<List<Edge>> graph) {
+        int[] distances = new int[graph.size()];
+        Arrays.fill(distances, Integer.MAX_VALUE);
+        distances[start] = 0;
 
-        int v = in.nextInt();
-        int e = in.nextInt();
-        start = in.nextInt();
-
-        graph = new List[v + 1];
-        dist = new int[v + 1];
-
-        for (int i = 1; i <= v; i++) {
-            graph[i] = new ArrayList<>();
-        }
-        for (int i = 1; i <= e; i++) {
-            graph[in.nextInt()].add(new Edge(in.nextInt(), in.nextInt()));
-        }
-    }
-
-    private static void dijkstra(int start) {
-        Arrays.fill(dist, Integer.MAX_VALUE);
-        dist[start] = 0;
-
-        PriorityQueue<Path> pq = new PriorityQueue<>(Comparator.comparingInt(path -> path.dist));
-        pq.add(new Path(start, dist[start]));
+        PriorityQueue<Path> pq = new PriorityQueue<>(Comparator.comparingInt(path -> path.distance));
+        pq.offer(new Path(start, 0));
 
         while (!pq.isEmpty()) {
             Path path = pq.poll();
 
-            if (path.dist > dist[path.idx]) {
+            if (path.distance > distances[path.id]) {
                 continue;
             }
 
-            for (Edge edge : graph[path.idx]) {
-                int newDist = path.dist + edge.weight;
+            for (Edge edge : graph.get(path.id)) {
+                int newDistance = path.distance + edge.weight;
 
-                if (newDist >= dist[edge.to]) {
-                    continue;
+                if (newDistance < distances[edge.to]) {
+                    distances[edge.to] = newDistance;
+                    pq.offer(new Path(edge.to, newDistance));
                 }
-
-                dist[edge.to] = newDist;
-                pq.add(new Path(edge.to, newDist));
             }
         }
-    }
 
-    private static void printShortestDistance() {
-        for (int i = 1; i < dist.length; i++) {
-            int result = dist[i];
-
-            if (result != Integer.MAX_VALUE) {
-                System.out.println(dist[i]);
-            } else {
-                System.out.println(INFINITE);
-            }
+        for (int i = 1; i < distances.length; i++) {
+            System.out.println(distances[i] != Integer.MAX_VALUE ? distances[i] : "INF");
         }
     }
 }
