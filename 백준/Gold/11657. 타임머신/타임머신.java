@@ -25,7 +25,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
 
         String[] input = in.readLine().split(" ");
         int v = Integer.parseInt(input[0]);
@@ -41,9 +40,7 @@ public class Main {
             graph.add(new Edge(from, to, weight));
         }
 
-        out.write(bellmanFord(1, v, graph));
-        out.flush();
-        out.close();
+        System.out.println(bellmanFord(1, v, graph));
         in.close();
     }
 
