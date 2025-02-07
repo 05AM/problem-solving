@@ -61,7 +61,6 @@ public class Main {
             }
         }
 
-        boolean isMinusCycle = false;
         for (Edge edge : graph) {
             if (dist[edge.from] != INF && dist[edge.from] + edge.weight < dist[edge.to]) {
                 return NOT_FOUND;
