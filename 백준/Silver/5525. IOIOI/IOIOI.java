@@ -11,25 +11,23 @@ public class Main {
         int m = Integer.parseInt(in.readLine());
 
         String origin = in.readLine();
-        String compare = "IO".repeat(n) + "I";
-        int length = compare.length();
 
+        int count = 0;
         int answer = 0;
-        for (int i = 0; i <= m - length; i++) {
-            if (origin.charAt(i) == 'I') {
-                int l = i;
-                int r = i + 1;
 
-                while (r - l < length) {
-                    if (origin.charAt(r) != compare.charAt(r - l)) {
-                        break;
-                    }
-                    r++;
-                }
+        for (int i = 0; i < m - 2; ) {
+            if (origin.charAt(i) == 'I' && origin.charAt(i + 1) == 'O' && origin.charAt(i + 2) == 'I') {
+                count++;
 
-                if (r - l == length) {
+                if (count == n) {
                     answer++;
+                    count--;
                 }
+
+                i += 2;
+            } else {
+                count = 0;
+                i++;
             }
         }
 
