@@ -1,15 +1,12 @@
 class Solution {
     public int solution(int n) {
-        String binary = Integer.toBinaryString(n);
-        int oneCount = binary.length() - binary.replace("1", "").length();
-        int count = -1;
+        int oneCount = Integer.bitCount(n);
 
-        while (oneCount != count) {
+        while (true) {
             n++;
-            String nextBinary = Integer.toBinaryString(n);
-            count = nextBinary.length() - nextBinary.replace("1", "").length();
+            if(oneCount == Integer.bitCount(n)) {
+                return n;
+            }
         }
-
-        return n;
     }
 }
