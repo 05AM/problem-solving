@@ -3,19 +3,23 @@ import java.util.*;
 class Solution {
     public int solution(int k, int[] tangerine) {
         // 개수 세기
-        Integer[] count = new Integer[10000000 + 1];
-        Arrays.fill(count, 0);
+        Map<Integer, Integer> countMap = new HashMap<>();
         for (int size : tangerine) {
-            count[size]++;
+            countMap.merge(size, 1, Integer::sum);
         }
 
         // 내림차순 정렬
-        Arrays.sort(count, Comparator.reverseOrder());
+        List<Integer> counts = new ArrayList<>(countMap.values());
+        counts.sort(Comparator.reverseOrder());
 
         int answer = 0;
-        for (int i = 0; i < count.length && k > 0; i++) {
-            k -= count[i];
+        for (int count : counts) {
+            k -= count;
             answer++;
+
+            if (k <= 0) {
+                break;
+            }
         }
 
         return answer;
