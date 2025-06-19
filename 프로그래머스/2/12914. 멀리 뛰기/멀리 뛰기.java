@@ -1,16 +1,23 @@
 class Solution {
     public long solution(int n) {
-        long[] dp = new long[2000 + 1];
-        dp[1] = 1;
-
-        if (n >= 2) {
-            dp[2] = 2;
+        if (n == 1) {
+            return 1;
         }
+
+        if (n == 2) {
+            return 2;
+        }
+
+        int MOD = 1234567;
+        int a = 1;
+        int b = 2;
 
         for (int i = 3; i <= n; i++) {
-            dp[i] = (dp[i - 1] + dp[i - 2]) % 1234567;
+            int temp = (a + b) % MOD;
+            a = b;
+            b = temp;
         }
 
-        return dp[n];
+        return b;
     }
 }
