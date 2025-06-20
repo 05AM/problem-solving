@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -11,7 +12,7 @@ public class Main {
 
         int n = in.nextInt();
         while (n-- > 0) {
-            String[] commands = in.next().split("");
+            String commands = in.next();
             int size = in.nextInt();
 
             String input = in.next();
@@ -23,12 +24,13 @@ public class Main {
 
             boolean isNaturalOrder = true;
             boolean isError = false;
-            for (String command : commands) {
+
+            for (char command : commands.toCharArray()) {
                 switch (command) {
-                    case "R":
+                    case 'R':
                         isNaturalOrder = !isNaturalOrder;
                         break;
-                    case "D":
+                    case 'D':
                         if (nums.isEmpty()) {
                             isError = true;
                         } else {
@@ -52,14 +54,10 @@ public class Main {
             } else {
                 result.append("[");
 
-                int finalSize = nums.size();
-                for (int i = 0; i < finalSize; i++) {
-                    int num = isNaturalOrder ? nums.removeFirst() : nums.removeLast();
-                    result.append(num);
-
-                    if (i != finalSize - 1) {
-                        result.append(",");
-                    }
+                Iterator<Integer> it = isNaturalOrder ? nums.iterator() : nums.descendingIterator();
+                while (it.hasNext()) {
+                    result.append(it.next());
+                    if(it.hasNext()) result.append(",");
                 }
 
                 result.append("]");
