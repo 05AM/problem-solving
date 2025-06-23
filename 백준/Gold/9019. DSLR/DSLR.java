@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Main {
 
     private static final int MAX = 10000;
+    private static final char[] ops = new char[] {'D', 'S', 'L', 'R'};
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -25,7 +26,6 @@ public class Main {
         queue.add(new Object[] {"", a});    // 0: 사용한 명령어 목록 / 1: 현재 값
         isVisited[a] = true;
 
-        String answer = "";
         while (!queue.isEmpty()) {
             Object[] current = queue.poll();
             String command = current[0].toString();
@@ -33,41 +33,30 @@ public class Main {
 
             // 같으면
             if (n == b) {
-                answer = command;
-                break;
+                return command;
             }
 
             // 함수 처리
-            int result;
-            // D
-            result = (n * 2) % MAX;
-            if (!isVisited[result]) {
-                queue.add(new Object[] {command + "D", result});
-                isVisited[result] =true;
-            }
+            for (int i = 0; i < 4; i++) {
+                int result = apply(ops[i], n);
 
-            // S
-            result = (((n - 1) % MAX) + MAX) % MAX;
-            if (!isVisited[result]) {
-                queue.add(new Object[] {command + "S", result});
-                isVisited[result] =true;
-            }
-
-            // L
-            result = (n % 1000) * 10 + (n / 1000);
-            if (!isVisited[result]) {
-                queue.add(new Object[] {command + "L", result});
-                isVisited[result] =true;
-            }
-
-            // R
-            result = (n / 10) + (n % 10) * 1000;
-            if (!isVisited[result]) {
-                queue.add(new Object[] {command + "R", result});
-                isVisited[result] =true;
+                if (!isVisited[result]) {
+                    queue.add(new Object[] {command + ops[i], result});
+                    isVisited[result] =true;
+                }
             }
         }
 
-        return answer;
+        return "";
+    }
+
+    private static int apply(char op, int n) {
+        switch (op) {
+            case 'D': return (n * 2) % MAX;
+            case 'S': return (((n - 1) % MAX) + MAX) % MAX;
+            case 'L': return (n % 1000) * 10 + (n / 1000);
+            case 'R': return (n / 10) + (n % 10) * 1000;
+            default: throw new IllegalArgumentException();
+        }
     }
 }
