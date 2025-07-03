@@ -1,17 +1,13 @@
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Main {
 
-    private static int n;
-    private static int m;
+    private static final StringBuilder results = new StringBuilder();
 
-    private static int[] nums;
-    private static int[] selected;
-
-    private static final Set<String> results = new HashSet<>();
+    private static int n, m;
+    private static int[] nums, selected;
+    private static String last = "";
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -28,6 +24,8 @@ public class Main {
 
         Arrays.sort(nums);
         solution(0, 0);
+
+        System.out.println(results);
     }
 
     private static void solution(int index, int start) {
@@ -38,14 +36,18 @@ public class Main {
                 result.append(selected[i]).append(" ");
             }
 
-            if (!results.contains(result.toString())) {
-                results.add(result.toString());
-                System.out.println(result);
+            if (last != result.toString()) {
+                results.append(result).append("\n");
+                last = result.toString();
             }
             return;
         }
 
         for (int i = start; i < n; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+
             selected[index] = nums[i];
             solution(index + 1, i);
         }
