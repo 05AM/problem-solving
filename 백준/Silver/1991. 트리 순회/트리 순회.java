@@ -1,39 +1,17 @@
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
 
-    static Tree tree;
+    static Node[] tree;
     static StringBuilder result = new StringBuilder();
 
     static class Node {
-        String parent;
-        String left;
-        String right;
+        char left;
+        char right;
 
-        public Node(String parent, String left, String right) {
-            this.parent = parent;
+        public Node(char left, char right) {
             this.left = left;
             this.right = right;
-        }
-    }
-
-    static class Tree {
-        String root;
-        Map<String, Node> nodes;
-
-        public Tree(String root, Map<String, Node> nodes) {
-            this.root = root;
-            this.nodes = nodes;
-        }
-
-        Node getNode(String name) {
-            return nodes.get(name);
-        }
-
-        Node getRoot() {
-            return nodes.get(root);
         }
     }
 
@@ -41,59 +19,63 @@ public class Main {
         Scanner in = new Scanner(System.in);
 
         int n = in.nextInt();
-        Map<String, Node> nodes = new HashMap<>();
-        for (int i = 0; i < n; i++) {
-            String parent = in.next();
-            String left = in.next();
-            String right = in.next();
+        tree = new Node[26];
 
-            Node node = new Node(parent, left, right);
-            nodes.put(parent, node);
+        for (int i = 0; i < n; i++) {
+            char parent = in.next().charAt(0);
+            char left = in.next().charAt(0);
+            char right = in.next().charAt(0);
+
+            tree[parent - 'A'] = new Node(left, right);
         }
 
-        tree = new Tree("A", nodes);
-
         // 전위순회
-        preorder(tree.getRoot());
+        preorder('A');
         result.append("\n");
 
         // 중위순회
-        inorder(tree.getRoot());
+        inorder('A');
         result.append("\n");
 
         // 후위순회
-        postorder(tree.getRoot());
+        postorder('A');
 
         System.out.println(result);
     }
 
-    private static void preorder(Node node) {
-        if (node == null) {
+    private static void preorder(char c) {
+        if (c == '.') {
             return;
         }
 
-        result.append(node.parent);
-        preorder(tree.getNode(node.left));
-        preorder(tree.getNode(node.right));
+        Node node = tree[c - 'A'];
+
+        result.append(c);
+        preorder(node.left);
+        preorder(node.right);
     }
 
-    private static void inorder(Node node) {
-        if (node == null) {
+    private static void inorder(char c) {
+        if (c == '.') {
             return;
         }
 
-        inorder(tree.getNode(node.left));
-        result.append((node.parent));
-        inorder(tree.getNode(node.right));
+        Node node = tree[c - 'A'];
+
+        inorder(node.left);
+        result.append(c);
+        inorder(node.right);
     }
 
-    private static void postorder(Node node) {
-        if (node == null) {
+    private static void postorder(char c) {
+        if (c == '.') {
             return;
         }
 
-        postorder(tree.getNode(node.left));
-        postorder(tree.getNode(node.right));
-        result.append(node.parent);
+        Node node = tree[c - 'A'];
+
+        postorder(node.left);
+        postorder(node.right);
+        result.append(c);
     }
 }
