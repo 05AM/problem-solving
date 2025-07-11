@@ -1,26 +1,19 @@
 class Solution {
     public int[] solution(int brown, int yellow) {
-        int[] answer = new int[2];
-        int sum = brown + yellow;
-        
-        for (double h = 3; ; h++) {
-            for (double w = 3; ; w++) {
-                if (w * h > sum) {
-                    break;
-                } else if (w * h == sum) {
-                    if (brown == (2 * w + 2 * h - 4) && yellow == (w - 2) * (h - 2)) {
-                        answer[0] = (int) w;
-                        answer[1] = (int) h;
-                        break;
-                    }
-                }
+        int total = brown + yellow;
+
+        for (int h = 3; h <= total / 3; h++) {
+            if (total % h != 0) {
+                continue;
             }
 
-            if (answer[0] != 0) {
-                break;
+            int w = (int)(total / h);
+
+            if (yellow == (w - 2) * (h - 2)) {
+                return new int[] {w, h};
             }
         }
-        
-        return answer;
+
+        return new int[]{};
     }
 }
