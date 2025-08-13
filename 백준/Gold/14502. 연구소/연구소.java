@@ -1,6 +1,6 @@
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
@@ -46,16 +46,17 @@ public class Main {
         int best = blankCnt - 3;
         int max = 0;
 
+        Queue<int[]> queue = new ArrayDeque<>();
+        List<int[]> modified = new ArrayList<>();
+
         // 3개 빈 칸 조합으로 벽 세우기
         for (int i = 0; i < blankCnt; i++) {
+            if (max == best) {
+                continue;
+            }
+
             for (int j = i + 1; j < blankCnt; j++) {
                 for (int k = j + 1; k < blankCnt; k++) {
-                    if (max == best) {
-                        continue;
-                    }
-
-                    List<int[]> modified = new ArrayList<>();
-
                     // 벽 세우기
                     int[] wall1 = blanks.get(i);
                     int[] wall2 = blanks.get(j);
@@ -70,7 +71,6 @@ public class Main {
                     modified.add(wall3);
 
                     // 바이러스 지점에서 전파해서 안전구역 개수 구하기
-                    Queue<int[]> queue = new LinkedList<>();
                     for (int[] virus : viruses) {
                         queue.add(virus);
                     }
@@ -99,7 +99,7 @@ public class Main {
                         }
 
                         // 이미 현재 최댓값보다 결과가 작으면
-                        if (max > (best - infectedCnt)) {
+                        if (max >= (best - infectedCnt)) {
                             break;
                         }
                     }
@@ -111,6 +111,9 @@ public class Main {
                     for (int[] index : modified) {
                         map[index[0]][index[1]] = 0;
                     }
+
+                    queue.clear();
+                    modified.clear();
                 }
             }
         }
