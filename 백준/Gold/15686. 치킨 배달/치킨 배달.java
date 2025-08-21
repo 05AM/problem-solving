@@ -40,10 +40,9 @@ public class Main {
         dists = new int[houseCnt][chickenCnt];
 
         for (int row = 0; row < houseCnt; row++) {
+            int[] house = houses.get(row);
             for (int col = 0; col < chickenCnt; col++) {
-                int[] house = houses.get(row);
                 int[] chicken = chickens.get(col);
-
                 dists[row][col] = Math.abs(house[0] - chicken[0]) + Math.abs(house[1] - chicken[1]);
             }
         }
@@ -51,22 +50,23 @@ public class Main {
         // 치킨집 chickenCnt개 중에 m개를 골랐을 때 치킨거리 구하고 최솟값 갱신하기
         // dfs로 m개 고르기
         // 도중 min보다 커진다면 그만 두기
-        dfs(0, new ArrayList<>());
+        int[] selected = new int[m];
+        dfs(0, 0, selected);
 
         System.out.println(min);
     }
 
-    private static void dfs(int start, List<Integer> selected) {
-        if (selected.size() == m) {
+    private static void dfs(int start, int depth, int[] selected) {
+        if (depth == m) {
             // 반복문을 돌며 도시의 치킨 거리 구하기
             int cityDist = 0;
             for (int house = 0; house < houseCnt; house++) {
-                int min = Integer.MAX_VALUE;
+                int best = Integer.MAX_VALUE;
 
                 for (int chicken : selected) {
-                    min = Math.min(min, dists[house][chicken]);
+                    best = Math.min(best, dists[house][chicken]);
                 }
-                cityDist += min;
+                cityDist += best;
             }
 
             min = Math.min(min, cityDist);
@@ -74,13 +74,8 @@ public class Main {
         }
 
         for (int i = start; i < chickenCnt; i++) {
-            // 고르거나
-            selected.add(i);
-            dfs(i + 1, selected);
-
-            // 고르지 않거나
-            selected.remove(selected.size() - 1);
-            dfs(i + 1, selected);
+            selected[depth] = i;
+            dfs(i + 1, depth + 1, selected);
         }
     }
 }
