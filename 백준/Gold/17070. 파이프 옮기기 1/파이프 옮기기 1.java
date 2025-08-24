@@ -6,7 +6,6 @@ public class Main {
     static int answer = 0;
     static int n;
     static int[][] map;
-    static boolean[][] isVisited;
 
     enum Direction {
         HORIZONTAL,
@@ -43,7 +42,6 @@ public class Main {
 
         n = in.nextInt();
         map = new int[n + 1][n + 1];
-        isVisited = new boolean[n + 1][n + 1];
 
         for (int row = 1; row <= n; row++) {
             for (int col = 1; col <= n; col++) {
@@ -51,7 +49,6 @@ public class Main {
             }
         }
 
-        isVisited[1][2] = true;
         dfs(Direction.HORIZONTAL, 1, 2);
         System.out.println(answer);
     }
@@ -69,15 +66,13 @@ public class Main {
             newCol = col + moveTo[1];
 
             // 범위 안에 있고, 방문하지 않았으며, 벽이 아닌 경우
-            if (newRow <= n && newCol <= n && !isVisited[newRow][newCol] && map[newRow][newCol] != 1) {
+            if (newRow <= n && newCol <= n && map[newRow][newCol] != 1) {
                 // 대각선 벽 검사
                 if (move.direction == Direction.DIAGONAL && (map[newRow - 1][newCol] == 1 || map[newRow][newCol - 1] == 1)) {
                     continue;
                 }
 
-                isVisited[newRow][newCol] = true;
                 dfs(move.direction, newRow, newCol);
-                isVisited[newRow][newCol] = false;
             }
         }
     }
