@@ -5,104 +5,111 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static final int LOC = 9;
-    private static final int BLANK = 0;
-    private static final int[] dx = new int[] {0, -1, 0, 1};
-    private static final int[] dy = new int[] {-1, 0, 1, 0};
+    static final int SHARK = 9;
+    static final int[] dx = {0, -1, 0, 1};
+    static final int[] dy = {-1, 0, 1, 0};
+
+    static int n;
+    static int[][] map;
 
     public static void main(String[] args) throws IOException {
         Scanner in = new Scanner(System.in);
+        n = in.nextInt();
+        map = new int[n][n];
 
-        int n = in.nextInt();
-        int[][] map = new int[n][n];
-        int row = -1;
-        int col = -1;
-
+        int sharkRow = 0, sharkCol = 0;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 map[i][j] = in.nextInt();
-
-                if (map[i][j] == LOC) {
-                    row = i;
-                    col = j;
+                if (map[i][j] == SHARK) {
+                    sharkRow = i;
+                    sharkCol = j;
+                    map[i][j] = 0;
                 }
             }
         }
 
-        System.out.println(solution(n, map, row, col));
+        System.out.println(simulate(sharkRow, sharkCol));
     }
 
-    private static int solution(int n, int[][] map, int initialRow, int initialCol) {
-        int answer = 0;
-        int size = 2;
-        int eaten = 0;
-        map[initialRow][initialCol] = 0;
+    private static int simulate(int sharkRow, int sharkCol) {
+        int sharkSize = 2;   // 상어 초기 크기
+        int eatenCount = 0;  // 먹은 물고기 수
+        int totalTime = 0;   // 총 이동 시간
 
-        Queue<int[]> queue = new ArrayDeque<>();
-        int[] loc = new int[] {initialRow, initialCol, 0};  // row, col, distance
+        int currentRow = sharkRow;
+        int currentCol = sharkCol;
 
-        boolean canMove = true;
-        while (canMove) {
-            canMove = false;
-            int newRow = Integer.MAX_VALUE;
-            int newCol = Integer.MAX_VALUE;
-            int newDist = Integer.MAX_VALUE;
+        while (true) {
+            int[] target = bfs(currentRow, currentCol, sharkSize);
+            if (target == null) break; // 더 이상 먹을 물고기 없음
 
-            boolean[][] isVisited = new boolean[n][n];
-            isVisited[loc[0]][loc[1]] = true;
-            map[loc[0]][loc[1]] = 0;
-            queue.add(loc);
+            int targetRow = target[0];
+            int targetCol = target[1];
+            int distance = target[2];
 
-            while (!queue.isEmpty()) {
-                int[] curr = queue.poll();
-                int row = curr[0];
-                int col = curr[1];
-                int distance = curr[2];
+            totalTime += distance;
+            eatenCount++;
 
-                if (distance > newDist) {
-                    break;
-                }
+            // 이동 후 상태 갱신
+            map[targetRow][targetCol] = 0;
+            currentRow = targetRow;
+            currentCol = targetCol;
 
-                // 먹을 수 있으면,
-                if (map[row][col] != BLANK && map[row][col] < size) {
-                    canMove = true;
-
-                    if (row < newRow || (row == newRow && col < newCol)) {
-                        newRow = row;
-                        newCol = col;
-                        newDist = distance;
-                    }
-                }
-
-                for (int i = 0; i < 4; i++) {
-                    int nextRow = row + dy[i];
-                    int nextCol = col + dx[i];
-
-                    if (nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= n) {
-                        continue;
-                    }
-
-                    if (!isVisited[nextRow][nextCol] && map[nextRow][nextCol] <= size) {
-                        queue.add(new int[] {nextRow, nextCol, distance + 1});
-                        isVisited[nextRow][nextCol] = true;
-                    }
-                }
-            }
-
-            if (canMove) {
-                // 사이즈 조정
-                eaten++;
-                if (size == eaten) {
-                    size++;
-                    eaten = 0;
-                }
-
-                loc = new int[] {newRow, newCol, 0};
-                answer += newDist;
-                queue.clear();
+            if (eatenCount == sharkSize) {
+                sharkSize++;
+                eatenCount = 0;
             }
         }
 
-        return answer;
+        return totalTime;
+    }
+
+    private static int[] bfs(int startRow, int startCol, int sharkSize) {
+        Queue<int[]> queue = new ArrayDeque<>();
+        boolean[][] visited = new boolean[n][n];
+
+        queue.add(new int[]{startRow, startCol, 0});
+        visited[startRow][startCol] = true;
+
+        int minDistance = Integer.MAX_VALUE;
+        int targetRow = Integer.MAX_VALUE;
+        int targetCol = Integer.MAX_VALUE;
+
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int row = current[0];
+            int col = current[1];
+            int distance = current[2];
+
+            // 이미 더 먼 거리면 중단
+            if (distance > minDistance) break;
+
+            // 먹을 수 있는 물고기 발견
+            if (map[row][col] != 0 && map[row][col] < sharkSize) {
+                if (row < targetRow || (row == targetRow && col < targetCol)) {
+                    minDistance = distance;
+                    targetRow = row;
+                    targetCol = col;
+                }
+                continue;
+            }
+
+            // 아직 목표 거리 미확정이면 계속 확장
+            for (int dir = 0; dir < 4; dir++) {
+                int nextRow = row + dy[dir];
+                int nextCol = col + dx[dir];
+
+                if (nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= n) continue;
+                if (visited[nextRow][nextCol]) continue;
+                if (map[nextRow][nextCol] > sharkSize) continue;
+
+                visited[nextRow][nextCol] = true;
+                queue.add(new int[]{nextRow, nextCol, distance + 1});
+            }
+        }
+
+        if (targetRow == Integer.MAX_VALUE) return null; // 먹을 수 있는 물고기 없음
+        return new int[]{targetRow, targetCol, minDistance};
     }
 }
