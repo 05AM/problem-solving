@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,17 +22,13 @@ class Edge {
 public class Main {
     private static final int INF = Integer.MAX_VALUE;
     private static final String NOT_FOUND = "-1";
-    private static final int START = 1;
-
-    private static int v;
-    private static long[] dist;
 
     public static void main(String[] args) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        // 입력
         String[] input = in.readLine().split(" ");
-        v = Integer.parseInt(input[0]);
+        int v = Integer.parseInt(input[0]);
         int e = Integer.parseInt(input[1]);
 
         List<Edge> graph = new ArrayList<>();
@@ -43,46 +41,40 @@ public class Main {
             graph.add(new Edge(from, to, weight));
         }
 
-        // 결과 출력
-        if (!bellmanFord(v, START, graph)) {
-            System.out.println(NOT_FOUND);
-        } else {
-            StringBuilder result = new StringBuilder();
-            for (int i = 1; i <= v; i++) {
-                if (i == START) {
-                    continue;
-                }
-                result.append(dist[i] != INF ? dist[i] : NOT_FOUND).append("\n");
-            }
-
-            System.out.println(result);
-        }
-
+        out.write(bellmanFord(1, v, graph));
+        out.flush();
+        out.close();
         in.close();
     }
 
-    private static boolean bellmanFord(int v, int start, List<Edge> graph) {
-        dist = new long[v + 1];
+    private static String bellmanFord(int start, int v, List<Edge> graph) {
+        long[] dist = new long[v + 1];
         Arrays.fill(dist, INF);
         dist[start] = 0;
 
-        // 모든 간선을 v번 돌며 최단 거리 갱신
-        for (int i = 1; i <= v; i++) {
-            boolean updated = false;
-
+        for (int i = 0; i < v - 1; i++) {
             for (Edge edge : graph) {
-                if (dist[edge.from] != INF && dist[edge.to] > dist[edge.from] + edge.weight) {
+                if (dist[edge.from] != INF
+                        && dist[edge.from] + edge.weight < dist[edge.to]) {
                     dist[edge.to] = dist[edge.from] + edge.weight;
-                    updated = true;
                 }
-            }
-
-            // v번째에 갱신되면 음수 사이클 존재
-            if (i == v && updated) {
-                return false;
             }
         }
 
-        return true;
+        for (Edge edge : graph) {
+            if (dist[edge.from] != INF && dist[edge.from] + edge.weight < dist[edge.to]) {
+                return NOT_FOUND;
+            }
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (int i = 1; i <= v; i++) {
+            if (i == start) {
+                continue;
+            }
+            result.append(dist[i] != Integer.MAX_VALUE ? dist[i] : NOT_FOUND).append("\n");
+        }
+
+        return result.toString();
     }
 }
