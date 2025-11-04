@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -46,37 +45,34 @@ public class Main {
         int n = Integer.parseInt(st.nextToken());
         int k = Integer.parseInt(st.nextToken());
 
-        List<Nation> nations = new ArrayList<>();
-
+        Nation[] nations = new Nation[n];
+        Nation target = null;
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(in.readLine());
-            int nationCode = Integer.parseInt(st.nextToken());
+            int code = Integer.parseInt(st.nextToken());
             int gold = Integer.parseInt(st.nextToken());
             int silver = Integer.parseInt(st.nextToken());
             int bronze = Integer.parseInt(st.nextToken());
 
-            nations.add(new Nation(nationCode, gold, silver, bronze));
-        }
+            nations[i] = new Nation(code, gold, silver, bronze);
 
-        nations.sort(Comparator.reverseOrder());
-
-        // 동등수를 계산하는 방법은 무엇일까?
-        int rank = 1;
-        if (nations.get(0).code != k) {
-            for (int i = 1; i < n; i++) {
-                Nation prev = nations.get(i - 1);
-                Nation curr = nations.get(i);
-
-                if (prev.compareTo(curr) > 0) {
-                    rank = i + 1;
-                }
-
-                if (curr.code == k) {
-                    break;
-                }
+            if (code == k) {
+                target = nations[i];
             }
         }
 
-        System.out.println(rank);
+        // 나보다 잘한 국가 개수 + 1이므로 한 번만 반복하면 됨
+        int betters = 0;
+        for (Nation nation : nations) {
+            if (nation.code == k) {
+                continue;
+            }
+
+            if (target.compareTo(nation) < 0) {
+                betters++;
+            }
+        }
+
+        System.out.println(betters + 1);
     }
 }
