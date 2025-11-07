@@ -1,45 +1,61 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Arrays;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int N = scanner.nextInt();
-        char[][] pattern = new char[N][N];
+    private static char[][] result;
 
-        createPattern(pattern, N, 0, 0);
-        printPattern(pattern);
+    public static void main(String[] args) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+        int n = Integer.parseInt(in.readLine());
+        result = new char[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(result[i], ' ');
+        }
+
+        draw(0, 0, n);
+
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                out.write(result[i][j]);
+            }
+            out.write("\n");
+        }
+
+        out.flush();
+
+        in.close();
+        out.close();
     }
 
-    private static void createPattern(char[][] pattern, int size, int x, int y) {
-        if (size == 1) {
-            pattern[x][y] = '*';
+    private static void draw(int r, int c, int h) {
+        if (h == 3) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (i == 1 && j == 1) {
+                        continue;
+                    }
+                    result[r + i][c + j] = '*';
+                }
+            }
             return;
         }
 
-        int newSize = size / 3;
+        int nextH = h / 3;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (i == 1 && j == 1) {
-                    fillBlank(pattern, newSize, x + i * newSize, y + j * newSize);
-                } else {
-                    createPattern(pattern, newSize, x + i * newSize, y + j * newSize);
+                    continue;
                 }
-            }
-        }
-    }
 
-    private static void fillBlank(char[][] pattern, int size, int x, int y) {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                pattern[x + i][y + j] = ' ';
+                draw(r + nextH * i, c + nextH * j, nextH);
             }
-        }
-    }
-
-    private static void printPattern(char[][] pattern) {
-        for (char[] row : pattern) {
-            System.out.println(row);
         }
     }
 }
