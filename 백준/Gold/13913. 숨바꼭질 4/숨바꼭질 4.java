@@ -2,9 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -23,49 +21,46 @@ public class Main {
     }
 
     private static void solution(int n, int k) {
-        int min = Integer.MAX_VALUE;
+        int[] dist = new int[LIMIT + 1];
         int[] prev = new int[LIMIT + 1];
+        Arrays.fill(dist, -1);
         Arrays.fill(prev, -1);
 
-        Queue<int[]> queue = new ArrayDeque<>();
-        queue.add(new int[] {n, 0});
-        prev[n] = LIMIT;
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.add(n);
+        dist[n] = 0;
 
         while (!queue.isEmpty()) {
-            int[] curr = queue.poll();
-            int loc = curr[0];
-            int time = curr[1];
+            int curr = queue.poll();
 
-            if (loc == k) {
-                min = time;
+            if (curr == k) {
                 break;
             }
 
-            int[] nexts = {loc - 1, loc + 1, loc * 2};
+            int[] nexts = {curr - 1, curr + 1, curr * 2};
             for (int next : nexts) {
-                if (next < 0 || next > LIMIT || prev[next] != -1) {
+                if (next < 0 || next > LIMIT || dist[next] != -1) {
                     continue;
                 }
 
-                prev[next] = loc;
-                queue.add(new int[] {next, time + 1});
+                prev[next] = curr;
+                dist[next] = dist[curr] + 1;
+                queue.add(next);
             }
         }
 
         StringBuilder result = new StringBuilder();
-        result.append(min).append("\n");
+        result.append(dist[k]).append("\n");
 
-        List<Integer> path = new ArrayList<>();
-        int idx = k;
-        while (true) {
-            path.add(idx);
-            if (idx == n) break;
-            idx = prev[idx];
+        ArrayDeque<Integer> stack = new ArrayDeque<>();
+        for (int i = k; i != -1; i = prev[i]) {
+            stack.push(i);
         }
 
-        for (int i = path.size() - 1; i >= 0; i--) {
-            result.append(path.get(i)).append(" ");
+        while (!stack.isEmpty()) {
+            result.append(stack.pop()).append(" ");
         }
+
         System.out.println(result);
     }
 }
