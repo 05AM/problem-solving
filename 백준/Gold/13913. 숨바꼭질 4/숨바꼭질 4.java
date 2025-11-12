@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+// 최단거리 + 경로
 public class Main {
 
     private static final int LIMIT = 100000;
@@ -64,3 +65,4 @@ public class Main {
         System.out.println(result);
     }
 }
+
