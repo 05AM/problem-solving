@@ -1,0 +1,7 @@
+-- 코드를 입력하세요
+SELECT MCDP_CD 진료과코드, SUM(1) 5월예약건수
+FROM APPOINTMENT
+WHERE YEAR(APNT_YMD) = 2022
+AND MONTH(APNT_YMD) = 5
+GROUP BY 진료과코드
+ORDER BY 5월예약건수, 진료과코드;
