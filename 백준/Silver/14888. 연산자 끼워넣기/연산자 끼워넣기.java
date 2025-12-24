@@ -1,67 +1,59 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.*;
 
 public class Main {
 
     static int n;
-    static int[] operators;
-    static int[] operands;
-
-    static int max = Integer.MIN_VALUE;
     static int min = Integer.MAX_VALUE;
+    static int max = Integer.MIN_VALUE;
+    static int[] sequence, operators;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        n = in.nextInt();
+        sequence = new int[n];
+        operators = new int[4];
 
-        n = Integer.parseInt(in.readLine());
+        for (int i = 0; i < n; i++) {
+            sequence[i] = in.nextInt();
+        }
 
-        operands = Arrays.stream(in.readLine().split(" "))
-                .mapToInt(Integer::parseInt)
-                .toArray();
-        operators = Arrays.stream(in.readLine().split(" "))
-                .mapToInt(Integer::parseInt)
-                .toArray();
+        for (int i = 0; i < 4; i++) {
+            operators[i] = in.nextInt();
+        }
 
-        solution(1, operands[0]);
+        calculateAll(1, sequence[0]);
 
         System.out.println(max);
         System.out.println(min);
     }
 
-    private static void solution(int level, int sum) {
-        if (level == n) {
-            min = Math.min(min, sum);
-            max = Math.max(max, sum);
-            return;
+    private static void calculateAll(int i, int value) {
+        if (i == n) {
+            min = Math.min(min, value);
+            max = Math.max(max, value);
+        } else {
+            for (int j = 0; j < 4; j++) {
+                if (operators[j] != 0) {
+                    int newValue = calculate(value, j, sequence[i]);
+
+                    operators[j]--;
+                    calculateAll(i + 1, newValue);
+                    operators[j]++;
+                }
+            }
         }
+    }
 
-        for (int i = 0; i < 4; i++) {
-            if (operators[i] == 0) {
-                continue;
-            }
-
-            operators[i]--;
-
-            switch (i) {
-                case 0:
-                    solution(level + 1, sum + operands[level]);
-                    operators[i]++;
-                    break;
-                case 1:
-                    solution(level + 1, sum - operands[level]);
-                    operators[i]++;
-                    break;
-                case 2:
-                    solution(level + 1, sum * operands[level]);
-                    operators[i]++;
-                    break;
-                case 3:
-                    solution(level + 1, sum / operands[level]);
-                    operators[i]++;
-                    break;
-            }
+    private static int calculate(int op1, int operator, int op2) {
+        switch (operator) {
+            case 0:
+                return op1 + op2;
+            case 1:
+                return op1 - op2;
+            case 2:
+                return op1 * op2;
+            default:
+                return op1 / op2;
         }
     }
 }
