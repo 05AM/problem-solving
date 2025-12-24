@@ -1,52 +1,43 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
+
+    static int n;
     static int answer = 0;
-    static boolean[][] board;
+    static int[] col;
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
+        n = in.nextInt();
+        col = new int[n];
 
-        int n = in.nextInt();
-        board = new boolean[n][n];
-
-        solution(0, n);
+        count(0);
         System.out.println(answer);
     }
 
-    private static void solution(int row, int n) {
-        if (row == n) {
+    private static void count(int r) {
+        if (r == n) {
             answer++;
-            return;
-        }
-
-        for (int col = 0; col < n; col++) {
-            if (isValid(row, col, n)) {
-                board[row][col] = true;
-                solution(row + 1, n);
-                board[row][col] = false;
+        } else {
+            for (int c = 0; c < n; c++) {
+                if (isValid(r, c)) {
+                    col[r] = c;
+                    count(r + 1);
+                }
             }
         }
     }
 
-    private static boolean isValid(int row, int col, int n) {
-        // 같은 열에 퀸이 존재하는지 확인
-        for (int i = 0; i < n; i++) {
-            if (board[i][col]) {
+    private static boolean isValid(int r, int c) {
+        // 현재 놓을 자리와 윗 행들이 겹치지 않는지 판단
+        for (int i = 0; i < r; i++) {
+            // 세로 겹치는지
+            if (col[i] == c) {
                 return false;
             }
-        }
 
-        // 오른쪽 대각선에 퀸이 존재하는지 확인
-        for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
-            if (board[i][j]) {
-                return false;
-            }
-        }
-
-        // 왼쪽 대각선에 퀸이 존재하는지 확인
-        for (int i = row - 1, j = col + 1; i >= 0 && j < n; i--, j++) {
-            if (board[i][j]) {
+            // 대각선 겹치는지
+            if (Math.abs(r - i) == Math.abs(c - col[i])) {
                 return false;
             }
         }
