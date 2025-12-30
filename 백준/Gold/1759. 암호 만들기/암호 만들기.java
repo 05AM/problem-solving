@@ -22,14 +22,14 @@ public class Main {
         alphabets = in.readLine().split(" ");
         Arrays.sort(alphabets);
 
-        findAllPossiblePassword(0, 0, 0, 0, 0);
+        findAllPossiblePassword(0, 0, 0, 0);
 
         System.out.println(result);
     }
 
-    private static void findAllPossiblePassword(int level, int selectIdx, int startIdx, int consonantCnt, int vowelCnt) {
-        if (level == l) {
-            if (selectIdx == selected.length && consonantCnt >= 2 && vowelCnt >= 1) {
+    private static void findAllPossiblePassword(int selectIdx, int startIdx, int consonantCnt, int vowelCnt) {
+        if (selectIdx == selected.length) {
+            if (consonantCnt >= 2 && vowelCnt >= 1) {
                 result.append(String.join("", selected)).append("\n");
             }
         } else {
@@ -44,8 +44,7 @@ public class Main {
                     nextConsonantCnt++;
                 }
 
-                findAllPossiblePassword(level + 1, selectIdx + 1, i + 1, nextConsonantCnt, nextVowelCnt);
-                findAllPossiblePassword(level + 1, selectIdx, i + 1, consonantCnt, vowelCnt);
+                findAllPossiblePassword(selectIdx + 1, i + 1, nextConsonantCnt, nextVowelCnt);
             }
         }
     }
