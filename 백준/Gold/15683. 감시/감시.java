@@ -18,16 +18,6 @@ public class Main {
         }
     }
 
-    static class CCTVStatus {
-        CCTV cctv;
-        int direction;
-
-        public CCTVStatus(CCTV cctv, int direction) {
-            this.cctv = cctv;
-            this.direction = direction;
-        }
-    }
-
     static final int BLANK = 0;
     static final int WALL = 6;
     static final int MARK = -1;
@@ -38,7 +28,7 @@ public class Main {
     static int n, m, k; // 사무실 세로, 가로, cctv 개수
     static int[][] map, mapForSimulation;
     static List<CCTV> cctvs;
-    static CCTVStatus[] fixed;
+    static int[] fixed;
     static int answer = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws Exception {
@@ -67,7 +57,7 @@ public class Main {
         }
 
         k = cctvs.size();
-        fixed = new CCTVStatus[k];
+        fixed = new int[k];
 
         findMinBlindSpot(0);
         System.out.println(answer);
@@ -82,9 +72,8 @@ public class Main {
 
             // 현재 상태에서 사각지대 수 구하기
             for (int i = 0; i < k; i++) {
-                CCTVStatus status = fixed[i];
-                CCTV cctv = status.cctv;
-                int direction = status.direction;
+                CCTV cctv = cctvs.get(i);
+                int direction = fixed[i];
                 int row = cctv.row;
                 int col = cctv.col;
 
@@ -125,21 +114,18 @@ public class Main {
                 case 3:
                 case 4:
                     for (int i = 0; i < 4; i++) {
-                        CCTVStatus status = new CCTVStatus(cctv, i);
-                        fixed[currIdx] = status;
+                        fixed[currIdx] = i;
                         findMinBlindSpot(currIdx + 1);
                     }
                     break;
                 case 2:
                     for (int i = 0; i < 2; i++) {
-                        CCTVStatus status = new CCTVStatus(cctv, i);
-                        fixed[currIdx] = status;
+                        fixed[currIdx] = i;
                         findMinBlindSpot(currIdx + 1);
                     }
                     break;
                 case 5:
-                    CCTVStatus status = new CCTVStatus(cctv, 0);
-                    fixed[currIdx] = status;
+                    fixed[currIdx] = 0;
                     findMinBlindSpot(currIdx + 1);
                     break;
             }
