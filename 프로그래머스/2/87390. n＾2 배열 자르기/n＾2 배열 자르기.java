@@ -7,9 +7,9 @@ class Solution {
         for (long i = left; i <= right; i++) {
             long row = i / n;
             long col = i % n;
-            long value = Math.max(row, col) + 1;
             
-            answer[answerIdx++] = (int)value;
+            int value = (int)Math.max(row, col) + 1;
+            answer[answerIdx++] = value;
         }
         
         return answer;
