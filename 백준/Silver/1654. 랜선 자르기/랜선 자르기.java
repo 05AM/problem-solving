@@ -1,42 +1,49 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] input = in.readLine().split(" ");
-        int k = Integer.parseInt(input[0]);
-        int n = Integer.parseInt(input[1]);
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        int k = in.nextInt();
+        int n = in.nextInt();
 
-        int[] lines = new int[k];
+        int[] cables = new int[k];
+        for (int i = 0; i < k; i++) {
+            cables[i] = in.nextInt();
+        }
+
+        System.out.println(solution(k, n, cables));
+    }
+
+    private static long solution(int k, int n, int[] cables) {
         int max = Integer.MIN_VALUE;
         for (int i = 0; i < k; i++) {
-            lines[i] = Integer.parseInt(in.readLine());
-            max = Math.max(max, lines[i]);
+            max = Math.max(max, cables[i]);
         }
 
         long left = 1;
         long right = max;
-        long result = left;
+        long answer = left;
 
-        while (right >= left) {
-            long mid = left + (right - left) / 2;
+        while (left <= right) {
+            long mid = (left + right) / 2;
 
-            long cnt = 0;
-            for (int line : lines) {
-                cnt += line / mid;
-            }
-
-            if (cnt >= n) {
-                result = Math.max(result, mid);
+            if (isAvailable(mid, n, cables)) {
+                answer = mid;
                 left = mid + 1;
             } else {
                 right = mid - 1;
             }
         }
 
-        System.out.println(result);
+        return answer;
+    }
+
+    private static boolean isAvailable(long length, int n, int[] cables) {
+        long cnt = 0;
+        for (int cable : cables) {
+            cnt += cable / length;
+        }
+        return cnt >= n;
     }
 }
