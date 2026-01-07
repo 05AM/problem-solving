@@ -2,9 +2,6 @@ import java.util.Scanner;
 
 public class Main {
 
-    static final int MAX_LECTURE_SIZE = 10000;
-    static final int MAX_LECTURE_CNT = 100000;
-
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
 
@@ -12,19 +9,19 @@ public class Main {
         int m = in.nextInt();
 
         int min = Integer.MIN_VALUE;
+        int max = 0;
         int[] lectures = new int[n];
         for (int i = 0; i < n; i++) {
             lectures[i] = in.nextInt();
             min = Math.max(min, lectures[i]);
+            max += lectures[i];
         }
 
-        int answer = solution(min, m, lectures);
+        int answer = solution(min, max, m, lectures);
         System.out.println(answer);
     }
 
-    private static int solution(int min, int m, int[] lectures) {
-        int max = MAX_LECTURE_SIZE * MAX_LECTURE_CNT;
-
+    private static int solution(int min, int max, int m, int[] lectures) {
         int left = min;
         int right = max;
         int result = left;
@@ -44,18 +41,20 @@ public class Main {
     }
 
     private static boolean isAvailable(int size, int cnt, int[] lectures) {
-        cnt--;
-        int curr = size;
+        int used = 1;
+        int sum = 0;
 
         for (int lecture : lectures) {
-            if (curr < lecture) {
-                if (cnt == 0) {
+            int rest = size - sum;
+
+            if (lecture > rest) {
+                if (used == cnt) {
                     return false;
                 }
-                cnt--;
-                curr = size;
+                used++;
+                sum = 0;
             }
-            curr -= lecture;
+            sum += lecture;
         }
         return true;
     }
