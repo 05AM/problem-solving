@@ -1,5 +1,12 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+/**
+ * - isSelected[1] = true 로 세팅한 이유
+ * 그냥 완탐하면 A팀과 B팀을 모두 뽑는 조합이므로 중복 탐색
+ * isSelected[1]을 true로 넣고 1번을 포함하는 팀을 A팀이라고 가정하여 대칭 제거
+ */
 
 public class Main {
 
@@ -16,10 +23,10 @@ public class Main {
         abilities = new int[n + 1][n + 1];
 
         for (int i = 1; i <= n; i++) {
-            String[] input = in.readLine().split(" ");
+            StringTokenizer st = new StringTokenizer(in.readLine());
 
             for (int j = 1; j <= n; j++) {
-                abilities[i][j] = Integer.parseInt(input[j - 1]);
+                abilities[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
