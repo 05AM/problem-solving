@@ -5,14 +5,13 @@ public class Main {
 
     static boolean[] isSelected;
     static int[][] abilities;
-    static int n, total;
+    static int n;
     static int minDiff = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
         n = Integer.parseInt(in.readLine());
-        total = 0;
         isSelected = new boolean[n + 1];
         abilities = new int[n + 1][n + 1];
 
@@ -21,11 +20,12 @@ public class Main {
 
             for (int j = 1; j <= n; j++) {
                 abilities[i][j] = Integer.parseInt(input[j - 1]);
-                total += abilities[i][j];
             }
         }
 
-        solution(0, 1);
+        int start = 1;
+        isSelected[start] = true;
+        solution(1, start + 1);
         System.out.println(minDiff);
     }
 
@@ -47,7 +47,7 @@ public class Main {
         int bSum = 0;
 
         for (int i = 1; i <= n; i++) {
-            for (int j = i; j <= n; j++) {
+            for (int j = i + 1; j <= n; j++) {
                 if (isSelected[i] && isSelected[j]) {
                     aSum += abilities[i][j] + abilities[j][i];
                 } else if (!isSelected[i] && !isSelected[j]) {
