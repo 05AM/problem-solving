@@ -1,53 +1,60 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class Main {
-    static int[][] s;
-    static boolean[] check;
-    static int n, answer = Integer.MAX_VALUE;
 
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
+    static boolean[] isSelected;
+    static int[][] abilities;
+    static int n, total;
+    static int minDiff = Integer.MAX_VALUE;
 
-        n = in.nextInt();
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
-        check = new boolean[n];
-        s = new int[n][n];
+        n = Integer.parseInt(in.readLine());
+        total = 0;
+        isSelected = new boolean[n + 1];
+        abilities = new int[n + 1][n + 1];
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                s[i][j] = in.nextInt();
+        for (int i = 1; i <= n; i++) {
+            String[] input = in.readLine().split(" ");
+
+            for (int j = 1; j <= n; j++) {
+                abilities[i][j] = Integer.parseInt(input[j - 1]);
+                total += abilities[i][j];
             }
         }
 
-        solution(0, 0);
-        System.out.println(answer);
+        solution(0, 1);
+        System.out.println(minDiff);
     }
 
     private static void solution(int level, int start) {
         if (level == n / 2) {
-            int sum1 = 0;
-            int sum2 = 0;
+            int diff = calculateDiff();
+            minDiff = Math.min(minDiff, diff);
+        } else {
+            for (int i = start; i <= n; i++) {
+                isSelected[i] = true;
+                solution(level + 1, i + 1);
+                isSelected[i] = false;
+            }
+        }
+    }
 
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (check[i] && check[j]) {
-                        sum1 += s[i][j];
-                    } else if (!check[i] && !check[j]) {
-                        sum2 += s[i][j];
-                    }
+    private static int calculateDiff() {
+        int aSum = 0;
+        int bSum = 0;
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = i; j <= n; j++) {
+                if (isSelected[i] && isSelected[j]) {
+                    aSum += abilities[i][j] + abilities[j][i];
+                } else if (!isSelected[i] && !isSelected[j]) {
+                    bSum += abilities[i][j] + abilities[j][i];
                 }
             }
-
-            answer = Math.min(answer, Math.abs(sum1 - sum2));
-            return;
         }
-
-        for (int i = start; i < n; i++) {
-            if (!check[i]) {
-                check[i] = true;
-                solution(level + 1, i + 1);
-                check[i] = false;
-            }
-        }
+        return Math.abs(aSum - bSum);
     }
 }
