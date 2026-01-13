@@ -2,6 +2,18 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+/**
+ * [오답 노트]
+ *
+ * 1. 중복 탐색을 막기 위해 start row, col 설정
+ *   - 다음 탐색이라고 무작정 +1 하기보단, 모든 조합을 한번씩 다 볼 수 있게 설정
+ *   - 이 문제는 같은 행에도 여러 가로 선을 놓을 수 있기 때문에 r + 1 해버리면 안됨
+ *   - 연속된 가로선을 방지하기 위해 start col은 현재 c + 2
+ *
+ * 2. 이 문제는 구현보다는 `탐색 순서 설계` 가 핵심
+ *   - 어떤 순서로, 어디서부터 다시 볼지 정확하게 정의하자
+ */
+
 public class Main {
 
     private static int min = Integer.MAX_VALUE;
