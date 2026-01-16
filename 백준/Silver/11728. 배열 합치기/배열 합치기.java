@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -8,30 +7,54 @@ public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
+        // 입력
         StringTokenizer st = new StringTokenizer(in.readLine());
 
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
 
-        int[] arr = new int[n + m];
+        int[] a = new int[n];
+        int[] b = new int[m];
 
         st = new StringTokenizer(in.readLine());
         for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
+            a[i] = Integer.parseInt(st.nextToken());
         }
 
         st = new StringTokenizer(in.readLine());
-        for (int i = n; i < n + m; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < m; i++) {
+            b[i] = Integer.parseInt(st.nextToken());
         }
 
-        Arrays.sort(arr);
+        // 합치고 정렬된 배열 구하기
+        int[] result = new int[n + m];
 
-        StringBuilder result = new StringBuilder();
+        int p1 = 0;
+        int p2 = 0;
+        int idx = 0;
+        while (true) {
+            if (p1 == n && p2 == m) {
+                break;
+            } else if (p1 == n) {
+                result[idx++] = b[p2++];
+                continue;
+            } else if (p2 == m) {
+                result[idx++] = a[p1++];
+                continue;
+            }
+
+            if (a[p1] <= b[p2]) {
+                result[idx++] = a[p1++];
+            } else if (a[p1] > b[p2]) {
+                result[idx++] = b[p2++];
+            }
+        }
+
+        StringBuilder answer = new StringBuilder();
         for (int i = 0; i < n + m; i++) {
-            result.append(arr[i]).append(" ");
+            answer.append(result[i]).append(" ");
         }
 
-        System.out.println(result);
+        System.out.println(answer);
     }
 }
