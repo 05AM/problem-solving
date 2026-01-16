@@ -15,7 +15,6 @@ public class Main {
         int k = Integer.parseInt(st.nextToken());
 
         st = new StringTokenizer(in.readLine());
-
         List<Integer> lionIds = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
@@ -24,21 +23,9 @@ public class Main {
             }
         }
 
-        int left = 0;
-        int right = k - 1;
         int min = Integer.MAX_VALUE;
-
-        while (right < lionIds.size()) {
-            if (lionIds.size() - left + 1 < k) {
-                break;
-            }
-            
-            if (right - left + 1 == k) {
-                min = Math.min(min, lionIds.get(right) - lionIds.get(left) + 1);
-                left++;
-            } else {
-                right++;
-            }
+        for (int i = 0; i <= lionIds.size() - k; i++) {
+            min = Math.min(min, lionIds.get(i + k - 1) - lionIds.get(i)  + 1);
         }
 
         System.out.println(min == Integer.MAX_VALUE ? -1 : min);
