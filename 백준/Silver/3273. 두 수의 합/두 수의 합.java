@@ -1,43 +1,46 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(in.readLine());
-        int[] nums = Arrays.stream(in.readLine().split(" "))
-                .mapToInt(Integer::parseInt)
-                .toArray();
+
+        StringTokenizer input = new StringTokenizer(in.readLine());
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = Integer.parseInt(input.nextToken());
+        }
+
         int x = Integer.parseInt(in.readLine());
 
-        System.out.println(solution(nums, x));
-
-        in.close();
+        int cnt = solution(arr, x);
+        System.out.println(cnt);
     }
 
-    private static int solution(int[] nums, int x) {
-        Arrays.sort(nums);
+    private static int solution(int[] arr, int x) {
+        // 크기가 1일 때 처리?
         int cnt = 0;
 
-        int front = 0;
-        int back = nums.length - 1;
+        Arrays.sort(arr);
+        int left = 0;
+        int right = arr.length - 1;
 
-        while (front < back) {
-            int sum = nums[front] + nums[back];
+        while (left < right) {
+            int sum = arr[left] + arr[right];
 
             if (sum == x) {
                 cnt++;
-                front++;
-                back--;
-            } else if (sum < x) {
-                front++;
+                right--;
+                left++;
             } else if (sum > x) {
-                back--;
+                right--;
+            } else if (sum < x) {
+                left++;
             }
         }
 
