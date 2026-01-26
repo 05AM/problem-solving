@@ -2,58 +2,62 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
-        int[] input = Arrays.stream(in.readLine().split(" "))
-            .mapToInt(Integer::parseInt)
-            .toArray();
-        int n = input[0];
-        int c = input[1];
+        StringTokenizer st = new StringTokenizer(in.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int c = Integer.parseInt(st.nextToken());
 
-        int[] houses = new int[n];
+        int[] positions = new int[n];
         for (int i = 0; i < n; i++) {
-            houses[i] = Integer.parseInt(in.readLine());
+            positions[i] = Integer.parseInt(in.readLine());
         }
 
-        int result = solution(n, c, houses);
+        int result = solution(n, c, positions);
         System.out.println(result);
     }
 
-    private static int solution(int n, int c, int[] houses) {
-        Arrays.sort(houses);
+    private static int solution(int n, int c, int[] positions) {
+        Arrays.sort(positions);
 
+        int right = positions[n - 1] - positions[0];
         int left = 1;
-        int right = houses[n - 1] - houses[0];
-        int maxLength = 1;
+        int answer = left;
 
         while (left <= right) {
             int mid = left + (right - left) / 2;
 
-            if (canInstallAll(mid, c, houses)) {
-                maxLength = mid;
+            if (isAvailable(mid, c, positions)) {
                 left = mid + 1;
+                answer = mid;
             } else {
                 right = mid - 1;
             }
         }
 
-        return maxLength;
+        return answer;
     }
 
-    private static boolean canInstallAll(int distance, int targetCount, int[] houses) {
-        int installedCount = 1;
-        int lastInstalled = houses[0];
+    private static boolean isAvailable(int dist, int c, int[] positions) {
+        int last = positions[0];
+        int count = 1;
 
-        for (int i = 1; i < houses.length; i++) {
-            if (houses[i] - lastInstalled >= distance) {
-                installedCount++;
-                lastInstalled = houses[i];
+        for (int i = 0; i < positions.length; i++) {
+            if (positions[i] - last >= dist) {
+                count++;
+                last = positions[i];
+            }
+
+            if (count == c) {
+                return true;
             }
         }
 
-        return installedCount >= targetCount;
+        return false;
     }
 }
