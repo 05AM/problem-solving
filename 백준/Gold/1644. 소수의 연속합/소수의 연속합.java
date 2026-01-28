@@ -20,18 +20,19 @@ public class Main {
         int cnt = 0;
         int left = 0;
         int right = 0;
-        int sum = primes[0];
+        int sum = 0;
 
-        while (left < primes.length) {
-            if (sum < n && right + 1 < primes.length) {
-                right++;
-                sum += primes[right];
-            } else {
+        while (true) {
+            if (sum >= n) {
                 if (sum == n) {
                     cnt++;
                 }
-                sum -= primes[left];
-                left++;
+                sum -= primes[left++];
+            } else {
+                if (right == primes.length) {
+                    break;
+                }
+                sum += primes[right++];
             }
         }
 
