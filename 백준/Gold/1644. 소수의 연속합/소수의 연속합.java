@@ -7,7 +7,6 @@ public class Main {
         Scanner in = new Scanner(System.in);
 
         int n = in.nextInt();
-
         System.out.println(getContinuousPrimeSumCount(n));
     }
 
@@ -17,26 +16,26 @@ public class Main {
         }
 
         int[] primes = getPrimeNumbersUntil(n);
-        int primesLength = primes.length;
 
-        int count = 0;
-        int front = 0;
-        int back = 0;
-        int currentSum = primes[0];
+        int cnt = 0;
+        int left = 0;
+        int right = 0;
+        int sum = primes[0];
 
-        while (front <= back) {
-            if (currentSum == n) {
-                count++;
-            }
-
-            if (currentSum <= n && back + 1 < primesLength) {
-                currentSum += primes[++back];
+        while (left < primes.length) {
+            if (sum < n && right + 1 < primes.length) {
+                right++;
+                sum += primes[right];
             } else {
-                currentSum -= primes[front++];
+                if (sum == n) {
+                    cnt++;
+                }
+                sum -= primes[left];
+                left++;
             }
         }
 
-        return count;
+        return cnt;
     }
 
     private static int[] getPrimeNumbersUntil(int n) {
@@ -46,10 +45,10 @@ public class Main {
         isPrimeNumber[0] = false;
         isPrimeNumber[1] = false;
 
-        for (int i = 2; i <= n; i++) {
+        for (int i = 2; (long) i * i <= n; i++) {
             if (isPrimeNumber[i]) {
-                for (int j = 2, next = i * j; next <= n; j++, next = i * j) {
-                    isPrimeNumber[next] = false;
+                for (int j = i * i; j <= n; j += i) {
+                    isPrimeNumber[j] = false;
                 }
             }
         }
