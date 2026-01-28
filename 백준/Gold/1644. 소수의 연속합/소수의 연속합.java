@@ -15,10 +15,10 @@ public class Main {
         if (n == 1) {
             return 0;
         }
-        
+
         int[] primes = getPrimeNumbersUntil(n);
         int primesLength = primes.length;
-        
+
         int count = 0;
         int front = 0;
         int back = 0;
