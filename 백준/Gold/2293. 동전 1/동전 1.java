@@ -1,27 +1,31 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
 
-        int n = in.nextInt();
-        int k = in.nextInt();
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int[] coins = new int[n];
-        for (int i = 0; i < n; i++) {
-            coins[i] = in.nextInt();
+        int coinCount = Integer.parseInt(st.nextToken());
+        int targetAmount = Integer.parseInt(st.nextToken());
+
+        int[] coins = new int[coinCount];
+        for (int i = 0; i < coinCount; i++) {
+            coins[i] = Integer.parseInt(br.readLine());
         }
 
-        // 가치의 합이 index가 되는 경우의 수
-        int[] dp = new int[k + 1];
-        dp[0] = 1;
+        int[] ways = new int[targetAmount + 1];
+        ways[0] = 1;
 
         for (int coin : coins) {
-            for (int sum = coin; sum <= k; sum++) {
-                dp[sum] += dp[sum - coin];
+            for (int amount = coin; amount <= targetAmount; amount++) {
+                ways[amount] += ways[amount - coin];
             }
         }
 
-        System.out.println(dp[k]);
+        System.out.println(ways[targetAmount]);
     }
 }
