@@ -3,8 +3,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
+
+/**
+ * [ 오답 노트 ]
+ * - 다익스트라: 시작점 x로 부터 다른 노드까지의 최단 거리
+ * - 그래프의 방향을 뒤집으면, 다른 노드들로부터 x까지의 최단 거리
+ */
 
 class Node {
     int to;
@@ -13,6 +20,16 @@ class Node {
     public Node(int to, int cost) {
         this.to = to;
         this.cost = cost;
+    }
+}
+
+class Path {
+    int loc;
+    int dist;
+
+    public Path(int loc, int dist) {
+        this.loc = loc;
+        this.dist = dist;
     }
 }
 
@@ -47,8 +64,8 @@ public class Main {
             reverseGraph[to].add(new Node(from, cost));
         }
 
-        int[] distToX = dijkstra(x, reverseGraph);
         int[] distFromX = dijkstra(x, graph);
+        int[] distToX = dijkstra(x, reverseGraph);
 
         int max = 0;
         for (int i = 1; i <= n; i++) {
@@ -59,32 +76,31 @@ public class Main {
     }
 
     private static int[] dijkstra(int start, ArrayList<Node>[] graph) {
-        int n = graph.length - 1;
-        int[] dist = new int[n + 1];
-        Arrays.fill(dist, INF);
-        dist[start] = 0;
+        int n = graph.length;
+        int[] dists = new int[n];
+        Arrays.fill(dists, Integer.MAX_VALUE);
+        dists[start] = 0;
 
-        PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> a.cost - b.cost);
-        pq.offer(new Node(start, 0));
+        PriorityQueue<Path> pq = new PriorityQueue<>(Comparator.comparingInt(p -> p.dist));
+        pq.offer(new Path(start, 0));
 
         while (!pq.isEmpty()) {
-            Node cur = pq.poll();
-            int now = cur.to;
-            int nowCost = cur.cost;
+            Path curr = pq.poll();
 
-            if (nowCost > dist[now]) continue;
+            if (curr.dist > dists[curr.loc]) {
+                continue;
+            }
 
-            for (Node edge : graph[now]) {
-                int next = edge.to;
-                int nextCost = nowCost + edge.cost;
+            for (Node node : graph[curr.loc]) {
+                int newDist = curr.dist + node.cost;
 
-                if (nextCost < dist[next]) {
-                    dist[next] = nextCost;
-                    pq.offer(new Node(next, nextCost));
+                if (newDist < dists[node.to]) {
+                    dists[node.to] = newDist;
+                    pq.offer(new Path(node.to, newDist));
                 }
             }
         }
 
-        return dist;
+        return dists;
     }
 }
