@@ -1,99 +1,86 @@
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Scanner;
+import java.util.StringTokenizer;
+
+class Node {
+    int to;
+    int cost;
+
+    public Node(int to, int cost) {
+        this.to = to;
+        this.cost = cost;
+    }
+}
 
 public class Main {
 
-    static class Edge {
-        int to;
-        int cost;
+    private static final int INF = 1_000_000_000;
 
-        public Edge(int to, int cost) {
-            this.to = to;
-            this.cost = cost;
-        }
-    }
+    public static void main(String[] args) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer input = new StringTokenizer(in.readLine());
 
-    static class Path {
-        int node;
-        int totalCost;
+        int n = Integer.parseInt(input.nextToken());
+        int m = Integer.parseInt(input.nextToken());
+        int x = Integer.parseInt(input.nextToken());
 
-        public Path(int node, int totalCost) {
-            this.node = node;
-            this.totalCost = totalCost;
-        }
-    }
+        ArrayList<Node>[] graph = new ArrayList[n + 1];
+        ArrayList<Node>[] reverseGraph = new ArrayList[n + 1];
 
-    public static void main(String[] args) {
-        Scanner in = new Scanner(new InputStreamReader(System.in));
-
-        int n = in.nextInt();
-        int m = in.nextInt();
-        int x = in.nextInt();
-
-        // graph 초기화
-        List<Edge>[] graph = new ArrayList[n + 1];           // 나로부터 갈 수 있는 곳
-        List<Edge>[] graphReversed = new ArrayList[n + 1];   // 나에게로 올 수 있는 곳
-        for (int i = 0; i <= n; i++) {
+        for (int i = 1; i <= n; i++) {
             graph[i] = new ArrayList<>();
-            graphReversed[i] = new ArrayList<>();
+            reverseGraph[i] = new ArrayList<>();
         }
 
         for (int i = 0; i < m; i++) {
-            int from = in.nextInt();
-            int to = in.nextInt();
-            int cost = in.nextInt();
+            input = new StringTokenizer(in.readLine());
 
-            graph[from].add(new Edge(to, cost));
-            graphReversed[to].add(new Edge(from, cost));
+            int from = Integer.parseInt(input.nextToken());
+            int to = Integer.parseInt(input.nextToken());
+            int cost = Integer.parseInt(input.nextToken());
+
+            graph[from].add(new Node(to, cost));
+            reverseGraph[to].add(new Node(from, cost));
         }
 
-        // 최장거리 찾기
-        System.out.println(solution(n, m, x, graph, graphReversed));
-    }
+        int[] distToX = dijkstra(x, reverseGraph);
+        int[] distFromX = dijkstra(x, graph);
 
-    private static int solution(int n, int m, int x, List<Edge>[] graph, List<Edge>[] graphReversed) {
-        // 각 n에서 x로 가는 최단거리
-        int[] distToX = dijikstra(n, x, graphReversed);
-
-        // x에서 각 마을로 가는 최단거리
-        int[] distFromX = dijikstra(n, x, graph);
-
-        int max = Integer.MIN_VALUE;
-        for (int j = 1; j <= n; j++) {
-            max = Math.max(max, distToX[j] + distFromX[j]);
+        int max = 0;
+        for (int i = 1; i <= n; i++) {
+            max = Math.max(max, distToX[i] + distFromX[i]);
         }
 
-        return max;
+        System.out.println(max);
     }
 
-    private static int[] dijikstra(int n, int x, List<Edge>[] graph) {
+    private static int[] dijkstra(int start, ArrayList<Node>[] graph) {
+        int n = graph.length - 1;
         int[] dist = new int[n + 1];
-        Arrays.fill(dist, Integer.MAX_VALUE);
+        Arrays.fill(dist, INF);
+        dist[start] = 0;
 
-        PriorityQueue<Path> pq = new PriorityQueue<>(Comparator.comparingInt(p -> p.totalCost));
-        pq.add(new Path(x, 0));
-        dist[x] = 0;
+        PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> a.cost - b.cost);
+        pq.offer(new Node(start, 0));
 
         while (!pq.isEmpty()) {
-            Path curr = pq.poll();
-            int node = curr.node;
-            int totalCost = curr.totalCost;
+            Node cur = pq.poll();
+            int now = cur.to;
+            int nowCost = cur.cost;
 
-            if (totalCost > dist[node]) {
-                continue;
-            }
+            if (nowCost > dist[now]) continue;
 
-            for (Edge edge : graph[node]) {
-                int newCost = totalCost + edge.cost;
+            for (Node edge : graph[now]) {
+                int next = edge.to;
+                int nextCost = nowCost + edge.cost;
 
-                if (newCost < dist[edge.to]) {
-                    dist[edge.to] = newCost;
-                    pq.add(new Path(edge.to, newCost));
+                if (nextCost < dist[next]) {
+                    dist[next] = nextCost;
+                    pq.offer(new Node(next, nextCost));
                 }
             }
         }
