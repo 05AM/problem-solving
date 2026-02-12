@@ -5,6 +5,28 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Queue;
 
+/**
+ * [오답노트]
+ * - BFS로 푼 이유
+ *   - 격자 그래프에서 최단 거리 찾는 문제
+ * - BFS 상세 유형
+ *   - connected component labeling, multi-source BFS
+ * - 문제 분석
+ *   - 단순 isVisited 방문 배열로는 해결 불가
+ *     - 충돌했을 때 어떤 섬의 경로끼리 충돌했는지 판단 못함
+ *     - 같은 섬에서 확장된 파동끼리 만난 것과 서로 다른 섬에서 확장된 파동이 만난 것을 구별해야 함
+ *     => 어떤 섬인지 섬마다 id를 다르게 주어 라벨링 필요
+ *   - 섬마다 BFS를 돌리지 못하는 이유
+ *     - BFS 1회 O(n^2)
+ *     - 최대 섬 개수 O(n^2)
+ *     => 최악 O(n^4)
+ *   - multi source BFS
+ *     - 반복 전에 모든 출발점을 큐에 넣고 시작, 동시 확장
+ *     - 각 경로를 각 섬의 id로 기록하고, 그에 따른 거리도 누적하며 기록
+ *     - 모든 섬을 동시에 확장시키면, 각 칸은 가장 가까운 섬의 파동에 의해 최초 방문됨
+ *     - 따라서 두 다른 섬의 파동이 만나는 순간이 최단 거리
+ */
+
 public class Main {
 
     private static final int[] dr = new int[]{1, 0, -1, 0};
